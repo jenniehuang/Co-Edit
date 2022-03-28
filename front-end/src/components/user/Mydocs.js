@@ -15,7 +15,6 @@ const Mydocs = () => {
     const myDoc = async () => {
       try {
         let data = await DocServices.mydoc();
-        console.log(data);
         setDocArr(data.data);
       } catch (err) {
         console.log(err);

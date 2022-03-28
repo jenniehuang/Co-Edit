@@ -18,7 +18,7 @@ import doc from "../../images/doc.jpg";
 
 const DocCard = ({ title, host, id }) => {
   return (
-    <a href={`http://localhost:3000/documents/${id}`} target="_blank">
+    <a href={`/documents/${id}`} target="_blank">
       <img className="doc-pic" src={doc} alt="" />
       <div className="doc-desc">
         <div className="title">{`📜${title}`}</div>

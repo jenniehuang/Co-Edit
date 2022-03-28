@@ -11,7 +11,7 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 //     {
 //       clientID: process.env.GOOGLE_CLIENT_ID,
 //       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:3000",
+//       callbackURL: process.env.SOCKET_ORIGIN,
 //     },
 //     //passport callback
 //     async function (accessToken, refreshToken, profile, cb) {
@@ -20,13 +20,15 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 //         console.log("already exist.");
 //         const tokenObj = { _id: foundUser.id, email: foundUser.email };
 //         const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
-//         res.send({ success: true, token: "JWT" + token, user: foundUser.name });
-//         console.log(`token from google:${token}`);
+//         res.send({
+//           token: "JWT " + token,
+//           name: foundUser.name,
+//           email: foundUser.email,
+//           subscribe: foundUser.subscribe,
+//         });
 //         cb(null, foundUser);
 
 //         //----delete
-//         console.log(token);
-//         console.log(foundUser);
 //       } else {
 //         let newUser = new User({
 //           name: profile.displayName,
@@ -38,7 +40,12 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 //         console.log("New user saved");
 //         const tokenObj = { _id: newUser.id, email: newUser.email };
 //         const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
-//         res.send({ success: true, token: "JWT" + token, user: newUser.name });
+//         res.send({
+//           token: "JWT " + token,
+//           name: newUser.name,
+//           email: newUser.email,
+//           subscribe: newUser.subscribe,
+//         });
 //         cb(null, newUser);
 //       }
 //     }

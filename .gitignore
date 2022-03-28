@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/build
+
+**/build
 
 # misc
 **/.env
@@ -25,3 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 
 note.txt
+**/*.sh
+**/Dockerfile
+**/*.yaml
