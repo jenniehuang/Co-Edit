@@ -53,9 +53,13 @@ const Signup = ({ switchHandler }) => {
   };
 
   return (
-    <div className={`signup-inner`}>
-      <form onSubmit={onSubmit}>
+    <div className="">
+      <form
+        className="grid grid-rows-3 gap-3 items-center px-8"
+        onSubmit={onSubmit}
+      >
         <input
+          className="w-full h-10 rounded-lg border-2 border-gray-200 p-2"
           type="text"
           placeholder="name"
           name="name"
@@ -63,6 +67,7 @@ const Signup = ({ switchHandler }) => {
           onChange={onChange}
         />
         <input
+          className="w-full h-10 rounded-lg border-2 border-gray-200 p-2"
           type="email"
           placeholder="email"
           name="email"
@@ -70,14 +75,15 @@ const Signup = ({ switchHandler }) => {
           onChange={onChange}
         />
         <input
+          className="w-full h-10 rounded-lg border-2 border-gray-200 p-2"
           type="password"
           placeholder="password"
           name="password"
           value={password}
           onChange={onChange}
         />
-        <button>signup</button>
-        <div className="switch" onClick={switchHandler}>
+        <button className="w-full h-10 bg-gray-500 rounded-lg">signup</button>
+        <div className="text-xl mb-3" onClick={switchHandler}>
           Already have an account? Login now!
         </div>
       </form>

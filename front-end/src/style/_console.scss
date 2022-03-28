@@ -59,15 +59,15 @@
       a {
         text-decoration: none;
         width: MIN(90%, 300px);
-        border: 1px solid black;
         border-radius: 5px;
 
         margin: 1rem;
         // height: 30vh;
-        box-shadow: 5px 10px black;
+        box-shadow: 3px 3px 5px gray;
         color: black;
         .doc-pic {
           width: 100%;
+          border-radius: 5px;
         }
 
         .doc-desc {

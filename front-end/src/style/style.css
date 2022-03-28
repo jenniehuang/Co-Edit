@@ -4,6 +4,7 @@
  * ----------------------------------------
  */
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap");
 @-webkit-keyframes slide-in-top {
   0% {
     -webkit-transform: translateY(-1000px);
@@ -79,7 +80,6 @@
 }
 
 nav {
-  background-color: pink;
   padding: 0rem 1rem;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -93,8 +93,7 @@ nav {
       -ms-flex-align: center;
           align-items: center;
   z-index: 1000;
-  font-family: "Noto Serif Display", serif;
-  border-bottom: 1px solid #000;
+  font-family: "EB Garamond", serif;
 }
 
 nav a {
@@ -320,8 +319,9 @@ nav .nav-list li {
   width: 90%;
   border: 1px solid;
   padding: 10px;
-  -webkit-box-shadow: 5px 10px;
-          box-shadow: 5px 10px;
+  -webkit-box-shadow: 3px 3px 5px gray;
+          box-shadow: 3px 3px 5px gray;
+  border-radius: 5px;
 }
 
 .header .right-box .auth-container {
@@ -341,8 +341,8 @@ nav .nav-list li {
   margin: 1rem;
   border: 1px solid;
   padding: 10px;
-  -webkit-box-shadow: 5px 10px;
-          box-shadow: 5px 10px;
+  -webkit-box-shadow: 3px 3px 5px gray;
+          box-shadow: 3px 3px 5px gray;
 }
 
 .header .right-box .auth-container .join-us {
@@ -487,16 +487,16 @@ nav .nav-list li {
 .console .console-main .docs a {
   text-decoration: none;
   width: MIN(90%, 300px);
-  border: 1px solid black;
   border-radius: 5px;
   margin: 1rem;
-  -webkit-box-shadow: 5px 10px black;
-          box-shadow: 5px 10px black;
+  -webkit-box-shadow: 3px 3px 5px gray;
+          box-shadow: 3px 3px 5px gray;
   color: black;
 }
 
 .console .console-main .docs a .doc-pic {
   width: 100%;
+  border-radius: 5px;
 }
 
 .console .console-main .docs a .doc-desc {

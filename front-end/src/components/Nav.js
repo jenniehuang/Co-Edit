@@ -14,9 +14,9 @@ const Nav = () => {
 
   return (
     <>
-      <nav>
+      <nav className="flex font-sans bg-black bg-opacity-50">
         <a href="/">
-          <div className="logo">Co-Edit</div>
+          <div className="text-white text-4xl m-4">Co-Edit</div>
         </a>
         <ul className="nav-list">
           {user ? (
@@ -28,7 +28,6 @@ const Nav = () => {
           )}
         </ul>
       </nav>
-      <div className="reserved"></div>
     </>
   );
 };

@@ -7,8 +7,9 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import Homepage from "./components/Homepage";
 import Console from "./components/user/Console";
+import "./index.css";
 
-import "./style/style.css";
+// import "./style/style.css";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
