@@ -1,56 +1,41 @@
-// const passport = require("passport");
-// const GoogleStrategy = require("passport-google-oauth20");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20");
 const User = require("../models/user-model");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 //http://www.passportjs.org/packages/passport-google-oauth20/
 
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: process.env.SOCKET_ORIGIN,
-//     },
-//     //passport callback
-//     async function (accessToken, refreshToken, profile, cb) {
-//       let foundUser = await User.findOne({ googleID: profile.id });
-//       if (foundUser) {
-//         console.log("already exist.");
-//         const tokenObj = { _id: foundUser.id, email: foundUser.email };
-//         const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
-//         res.send({
-//           token: "JWT " + token,
-//           name: foundUser.name,
-//           email: foundUser.email,
-//           subscribe: foundUser.subscribe,
-//         });
-//         cb(null, foundUser);
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: `${process.env.SERVER_URI}/api/auth/google/callback`,
+      scope: ["profile", "email"],
+    },
+    //passport callback
+    async function (accessToken, refreshToken, profile, cb) {
+      console.log(profile.emails[0].value);
+      let foundUser = await User.findOne({ googleID: profile.id });
+      if (foundUser) {
+        console.log("already exist.");
+        cb(null, foundUser);
+      } else {
+        const newUser = new User({
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          googleID: profile.id,
+          thumbnail: profile.photos[0].value,
+        });
 
-//         //----delete
-//       } else {
-//         let newUser = new User({
-//           name: profile.displayName,
-//           googleID: profile.id,
-//           thumbnail: profile.photos[0].value,
-//         });
-
-//         await newUser.save();
-//         console.log("New user saved");
-//         const tokenObj = { _id: newUser.id, email: newUser.email };
-//         const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
-//         res.send({
-//           token: "JWT " + token,
-//           name: newUser.name,
-//           email: newUser.email,
-//           subscribe: newUser.subscribe,
-//         });
-//         cb(null, newUser);
-//       }
-//     }
-//   )
-// );
+        await newUser.save();
+        console.log("New user saved");
+        cb(null, newUser);
+      }
+    }
+  )
+);
 
 module.exports = (passport) => {
   let opts = {};

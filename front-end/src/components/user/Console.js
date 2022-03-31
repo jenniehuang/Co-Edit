@@ -1,43 +1,45 @@
 import React, { useState } from "react";
-// import "../../style/console.css";
 import Nav from "../Nav";
 import Mydocs from "./Mydocs";
 import Shared from "./Shared";
+import { useTranslation } from "react-i18next";
 
 const Console = () => {
+  const { t } = useTranslation();
+
   let [myDoc, setMyDoc] = useState(true);
 
   return (
     <>
       <Nav />
-      <div className="console">
-        <div className="console-nav">
-          <a className=" item newdoc" href="/newdoc" target="_blank">
-            <div className="icon">📝</div>
-            New Doc
+      <div className="w-full mt-3 flex flex-col md:flex-row font-serif">
+        <div className=" flex flex-row w-full md:block md:w-1/6 md:ml-4">
+          <a className=" item" href="/newdoc" target="_blank">
+            <div className="m-2">📝</div>
+            {t("create")}
           </a>
           {/*  */}
           <div
             onClick={() => {
               setMyDoc(true);
             }}
-            className=" item my-docs"
+            className=" item "
           >
-            <div className="icon">📒</div>
-            My Docs
+            <div className="m-2">📒</div>
+            {t("mine")}
           </div>
           {/*  */}
           <div
             onClick={() => {
               setMyDoc(false);
             }}
-            className="item share"
+            className="item"
           >
-            <div className="icon">📚</div>
-            Shared with me
+            <div className=" m-2">📚</div>
+            {t("share")}
           </div>
         </div>
-        <div className="console-main">
+        <div className="w-full md:ml-12">
           {myDoc && <Mydocs />}
           {!myDoc && <Shared />}
         </div>

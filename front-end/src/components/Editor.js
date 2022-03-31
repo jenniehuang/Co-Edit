@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { io } from "socket.io-client";
-// import "../style/editor.css";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,9 @@ import { toast } from "react-toastify";
 import DocServices from "../services/doc-services";
 import Delete from "./portal/Delete";
 import UserList from "./portal/UserList";
-import QuillCursors from "quill-cursors";
+import Emoji from "./portal/Emoji";
+
+// import QuillCursors from "quill-cursors";
 
 // Quill.register("modules/cursors", QuillCursors);
 
@@ -38,8 +39,27 @@ const Editor = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [isDelete, setIsDelete] = useState(false);
   const [isOpenList, setIsOpenList] = useState(false);
+  const [isEmoji, setIsEmoji] = useState(false);
+  const [chosenEmoji, setChosenEmoji] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!chosenEmoji) return;
+    const emoji = chosenEmoji.emoji;
+    const range = quill.getSelection();
+    if (range) {
+      if (range.length == 0) {
+        console.log("User cursor is at index", range.index);
+        quill.insertText(range.index, emoji);
+      } else {
+        var text = quill.getText(range.index, range.length);
+        console.log("User has highlighted: ", text);
+      }
+    } else {
+      return;
+    }
+  }, [chosenEmoji]);
 
   useEffect(() => {
     if (!user) {
@@ -139,7 +159,6 @@ const Editor = () => {
   const wrapperRef = useCallback((wrapper) => {
     if (!wrapper) return;
     wrapper.innerHTML = "";
-
     const editor = document.createElement("div");
     wrapper.append(editor);
     const q = new Quill(editor, {
@@ -171,7 +190,6 @@ const Editor = () => {
 
   const grantAccess = async (e) => {
     e.preventDefault();
-    // let hostEmail = user ? user.email : "";
     let email = accessInputRef.current.value;
     try {
       let data = await DocServices.access(email, documentId);
@@ -189,15 +207,15 @@ const Editor = () => {
     <>
       {!isAuthorized && (
         <>
-          <div className="overlay"></div>
-          <div className="not-authorized">
-            <div className="forbidden">⛔</div>
-            <div className="text">{errorMsg}</div>
+          <div className="fixed left-0 ring-0 top-0 bottom-0 bg-black bg-opacity-80 z-10 "></div>
+          <div className="fixed flex flex-col items-center p-6 top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2 bg-black text-white w-2/5 z-20 rounded-xl shadow-xl">
+            <div className=" text-5xl">⛔</div>
+            <div className=" text-2xl font-semibold font-mono ">{errorMsg}</div>
             <div
               onClick={() => {
                 navigate("/");
               }}
-              className="back"
+              className=" bg-transparent rounded-50px border-2 border-white p-6 cursor-pointer"
             >
               back to Homepage
             </div>
@@ -219,24 +237,41 @@ const Editor = () => {
           setIsOpenList(false);
         }}
       />
+      <Emoji
+        isEmoji={isEmoji}
+        setChosenEmoji={setChosenEmoji}
+        onClose={() => {
+          setIsEmoji(false);
+        }}
+      />
+
       <div style={isAuthorized ? {} : NOT_AUTHORIZED_STYLE}>
-        <div className="control-bar">
-          <div className="public">
-            <div className="doc-icon">📝</div>
+        <div className=" w-1000px md:w-full bg-primary sticky top-0 justify-between flex flex-row p-3 z-40">
+          <div className="flex items-center">
+            <div className=" text-2xl">📝</div>
             <form onSubmit={submitTitle}>
               <input
                 title="Change Title"
-                className="title-input"
+                className=" text-black bg-transparent h-full text-xl border-none p-2 hover:border-2 hover:border-borderColor focus:border-2 focus:border-borderColor"
                 type="text"
                 value={docTitle}
                 onChange={titleChange}
               />
             </form>
+            <div
+              onClick={() => {
+                setIsEmoji(!isEmoji);
+              }}
+              className=" text-2xl cursor-pointer"
+            >
+              😎
+            </div>
           </div>
           {user && hostEmail === user.email && (
-            <div className="host">
+            <div className="flex flex-row items-center justify-between">
               <form onSubmit={grantAccess}>
                 <input
+                  className=" h-full text-xs border-none p-2 text-black"
                   ref={accessInputRef}
                   placeholder="type user email to grant access"
                   type="email"
@@ -264,7 +299,7 @@ const Editor = () => {
             </div>
           )}
         </div>
-        <div className="container" ref={wrapperRef}></div>;
+        <div className="w-1000px md:w-screen" ref={wrapperRef}></div>
       </div>
     </>
   );

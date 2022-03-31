@@ -38,7 +38,30 @@ router.post("/signup", async (req, res) => {
 });
 
 //-----------------------------------login------------------------------------
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/",
+    session: false,
+  }),
+  function (req, res) {
+    const { user } = req;
+    const tokenObj = { _id: user.id, email: user.email };
+    const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
+    res.redirect(
+      `${process.env.SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}`
+    );
+  }
+);
+
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account",
+  })
+);
 
 router.post("/login", async (req, res) => {
   //validating data
@@ -57,7 +80,6 @@ router.post("/login", async (req, res) => {
           token: "JWT " + token,
           name: user.name,
           email: user.email,
-          subscribe: user.subscribe,
         });
       } else {
         console.log(err);

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import DocServices from "../../services/doc-services";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const overlay_style = {
   position: "fixed",
@@ -14,6 +15,8 @@ const overlay_style = {
 };
 
 const Delete = ({ isDelete, onClose, docTitle, documentId }) => {
+  const { t } = useTranslation();
+
   const docTitleRef = useRef();
   const [isFailed, setIsFailed] = useState(false);
   const navigate = useNavigate();
@@ -35,19 +38,26 @@ const Delete = ({ isDelete, onClose, docTitle, documentId }) => {
   return ReactDOM.createPortal(
     <>
       <div onClick={onClose} style={overlay_style} />
-      <div className="delete-box ">
-        <div className="icon">⚠️</div>
-        <div className="text">
-          Are you sure you want to delete this document?
-        </div>
-        <div className="instruction">
-          Type the document name to delete the document
-        </div>
-        <form>
-          <input ref={docTitleRef} placeholder={docTitle} type="text" />
-          <button onClick={deleteHandler}>🗑</button>
+      <div className="w-96 fixed flex flex-col p-6 top-1/2 translate-x-2/4 -translate-y-1/2 right-1/2 bg-black text-white z-10 rounded-xl shadow-sm font-serif ">
+        <div className=" text-5xl m-4 text-center">⚠️</div>
+        <div className=" text-2xl text-center">{t("sure")}</div>
+        <div className=" text-base text-left pt-4">{t("type")}</div>
+        <form className="flex justify-center items-center m-4">
+          <input
+            className="h-8 p-2 text-black"
+            ref={docTitleRef}
+            placeholder={docTitle}
+            type="text"
+          />
+          <button className=" text-2xl bg-transparent" onClick={deleteHandler}>
+            🗑
+          </button>
         </form>
-        {isFailed && <div className="wrong">Wrong document title.</div>}
+        {isFailed && (
+          <div className=" font-semibold text-red-500 text-center">
+            {t("wrong")}
+          </div>
+        )}
       </div>
     </>,
     document.getElementById("portal")

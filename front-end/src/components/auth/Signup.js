@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { signup, reset } from "../../redux/auth/authSlice";
+import { useTranslation } from "react-i18next";
 
 const Signup = ({ switchHandler }) => {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -61,7 +64,7 @@ const Signup = ({ switchHandler }) => {
         <input
           className="w-full h-10 rounded-lg border-2 border-gray-200 p-2"
           type="text"
-          placeholder="name"
+          placeholder={t("name")}
           name="name"
           value={name}
           onChange={onChange}
@@ -69,7 +72,7 @@ const Signup = ({ switchHandler }) => {
         <input
           className="w-full h-10 rounded-lg border-2 border-gray-200 p-2"
           type="email"
-          placeholder="email"
+          placeholder={t("email")}
           name="email"
           value={email}
           onChange={onChange}
@@ -77,14 +80,16 @@ const Signup = ({ switchHandler }) => {
         <input
           className="w-full h-10 rounded-lg border-2 border-gray-200 p-2"
           type="password"
-          placeholder="password"
+          placeholder={t("password")}
           name="password"
           value={password}
           onChange={onChange}
         />
-        <button className="w-full h-10 bg-gray-500 rounded-lg">signup</button>
-        <div className="text-xl mb-3" onClick={switchHandler}>
-          Already have an account? Login now!
+        <button className="w-full h-10 bg-gray-500 rounded-lg">
+          {t("signUp")}
+        </button>
+        <div className="text-xl mb-3 cursor-pointer" onClick={switchHandler}>
+          {t("toLogin")}
         </div>
       </form>
       <img src="" alt="" />

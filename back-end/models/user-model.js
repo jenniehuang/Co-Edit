@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    maxLength: 10,
+    maxLength: 50,
   },
   email: {
     type: String,
@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
 
 //https://mongoosejs.com/docs/middleware.html
 userSchema.pre("save", async function (next) {
+  if (this.googleID) return next();
   if (this.isModified("password") || this.isNew) {
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;

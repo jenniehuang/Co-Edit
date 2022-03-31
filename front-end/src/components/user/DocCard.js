@@ -18,9 +18,13 @@ import doc from "../../images/doc.jpg";
 
 const DocCard = ({ title, host, id }) => {
   return (
-    <a href={`/documents/${id}`} target="_blank">
-      <img className="doc-pic" src={doc} alt="" />
-      <div className="doc-desc">
+    <a
+      className=" w-80 rounded m-4 shadow-md text-black "
+      href={`/documents/${id}`}
+      target="_blank"
+    >
+      <img className="w-full rounded" src={doc} alt="" />
+      <div className=" p-2">
         <div className="title">{`📜${title}`}</div>
         <div className="host">{`By: ${host}`}</div>
       </div>

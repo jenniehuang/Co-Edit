@@ -4,8 +4,11 @@ import { useSelector } from "react-redux";
 
 import DocServices from "../../services/doc-services";
 import Loading from "../Loading";
+import { useTranslation } from "react-i18next";
 
 const Mydocs = () => {
+  const { t } = useTranslation();
+
   let [docArr, setDocArr] = useState([]);
   let [isLoading, setIsLoading] = useState(true);
 
@@ -29,12 +32,12 @@ const Mydocs = () => {
   }
 
   return (
-    <div className="docs">
+    <div className="w-full flex flex-row flex-wrap justify-center md:justify-start align-center">
       {docArr.length !== 0 &&
         docArr.map((v) => (
           <DocCard key={v.id} id={v.id} title={v.title} host={v.hostName} />
         ))}
-      {docArr.length === 0 && <div>No Stuff Here!</div>}
+      {docArr.length === 0 && <div>{t("empty")}</div>}
     </div>
   );
 };

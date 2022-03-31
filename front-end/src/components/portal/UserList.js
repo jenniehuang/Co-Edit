@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import DocServices from "../../services/doc-services";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const overlay_style = {
   position: "fixed",
@@ -13,6 +14,8 @@ const overlay_style = {
 };
 
 const UserList = ({ isOpenList, onClose, documentId }) => {
+  const { t } = useTranslation();
+
   const [usersArr, setUsersArr] = useState([]);
 
   useEffect(() => {
@@ -42,19 +45,21 @@ const UserList = ({ isOpenList, onClose, documentId }) => {
   };
 
   if (!isOpenList) return null;
-  console.log(usersArr);
   return ReactDOM.createPortal(
     <>
       <div onClick={onClose} style={overlay_style} />
-      <div className="user-list ">
-        <div className="icon">📋</div>
-        {usersArr.length === 0 && <div>No users!</div>}
+      <div className=" w-96 fixed top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2 flex flex-col items-center rounded-xl bg-white shadow-md font-serif">
+        <div className=" text-5xl m-4 text-center">📋</div>
+        {usersArr.length === 0 && <div> {t("noUser")}</div>}
         {!(usersArr.length === 0) && (
-          <ul>
+          <ul className="list-decimal">
             {usersArr.map((v) => (
-              <li key={v.email}>
+              <li
+                className="m-4 text-xl border-b-2 border-gray-500"
+                key={v.email}
+              >
                 <span>{v.email}</span>
-                <span onClick={deleteHandler} className="delete-icon">
+                <span onClick={deleteHandler} className=" ml-20 cursor-pointer">
                   ❌
                 </span>
               </li>
