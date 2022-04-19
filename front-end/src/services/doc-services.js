@@ -2,6 +2,21 @@ import axios from "axios";
 const API_URL = process.env.REACT_APP_API_URL_DOC;
 
 class DocServices {
+  recentlyOpened() {
+    let token;
+    if (localStorage.getItem("user")) {
+      token = JSON.parse(localStorage.getItem("user")).token;
+    } else {
+      token = "";
+    }
+
+    return axios.get(API_URL + `/recentlyOpened`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  }
+
   getUsers(id) {
     let token;
     if (localStorage.getItem("user")) {

@@ -10,10 +10,10 @@ const overlay_style = {
   bottom: "0",
   right: "0",
   left: "0",
-  backgroundColor: "rgba(0,0,0,0.3)",
+  backgroundColor: "rgba(0,0,0,0.5)",
 };
 
-const UserList = ({ isOpenList, onClose, documentId }) => {
+const UserList = ({ isOpenList, onClose, documentId, socket }) => {
   const { t } = useTranslation();
 
   const [usersArr, setUsersArr] = useState([]);
@@ -36,9 +36,9 @@ const UserList = ({ isOpenList, onClose, documentId }) => {
     try {
       const deleteEmail = e.target.previousSibling.textContent;
       const response = await DocServices.remove(deleteEmail, documentId);
-      console.log(response);
       let filtered = usersArr.filter((v) => !(v.email === deleteEmail));
       setUsersArr(filtered);
+      socket.emit("delete-user", deleteEmail);
     } catch (err) {
       toast.error(err.response.data);
     }
@@ -52,14 +52,17 @@ const UserList = ({ isOpenList, onClose, documentId }) => {
         <div className=" text-5xl m-4 text-center">📋</div>
         {usersArr.length === 0 && <div> {t("noUser")}</div>}
         {!(usersArr.length === 0) && (
-          <ul className="list-decimal">
+          <ul className="w-11/12 h-30vh m-3 list-decimal overflow-y-auto overflow-x-hidden">
             {usersArr.map((v) => (
               <li
-                className="m-4 text-xl border-b-2 border-gray-500"
+                className=" relative mx-7 my-4 text-xl border-b-2 border-gray-500"
                 key={v.email}
               >
-                <span>{v.email}</span>
-                <span onClick={deleteHandler} className=" ml-20 cursor-pointer">
+                <span className="">{v.email}</span>
+                <span
+                  onClick={deleteHandler}
+                  className=" absolute right-0 cursor-pointer"
+                >
                   ❌
                 </span>
               </li>

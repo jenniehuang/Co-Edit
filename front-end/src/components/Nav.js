@@ -3,8 +3,10 @@ import { logout, reset } from "../redux/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
+import arrow from "../images/arrow.png";
+import { useState } from "react";
 
-const Nav = () => {
+const Nav = ({ setIsMenuOpen, isMenuOpen }) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -32,11 +34,27 @@ const Nav = () => {
 
   return (
     <>
-      <nav className=" w-screen flex flex-row justify-between items-center font-serif bg-black bg-opacity-50">
-        <a href="/">
-          <div className="text-white text-4xl m-4">Co-Edit</div>
-        </a>
-        <div className="flex flex-row">
+      <nav
+        className={` fixed top-0 right-0 z-10  flex flex-row justify-between items-center font-serif bg-gray-600 bg-opacity-50 pr-2 ${
+          isMenuOpen ? "w-full md:w-[calc(100vw_-_240px)]" : "w-full"
+        }`}
+      >
+        {!user && <div className="text-white text-4xl m-2 w-48">Co-Edit</div>}
+        {user && (
+          <div className="flex flex-row items-center ml-4">
+            <img
+              onClick={() => {
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              src={arrow}
+              alt=""
+              className={`${
+                isMenuOpen ? "hidden" : ""
+              } w-6 p-1 hover:bg-primary hover:bg-opacity-30 rounded-md`}
+            />
+          </div>
+        )}
+        <div className={`flex flex-row justify-end w-full `}>
           <div className="flex flex-row">
             {languages.map(({ code, name, country_code }) => (
               <button
@@ -44,14 +62,14 @@ const Nav = () => {
                   i18n.changeLanguage(code);
                 }}
                 key={name}
-                className="flex flex-col justify-center items-center mx-4 w-16 "
+                className="flex flex-col justify-center items-center w-12  "
               >
                 <span className="text-2xl">{country_code}</span>
-                <span className=" text-white">{name}</span>
+                {/* <span className=" text-white">{name}</span> */}
               </button>
             ))}
           </div>
-          <ul className=" text-xl right-0 m-4">
+          <ul className=" text-xl right-0 m-2">
             {user ? (
               <>
                 <li

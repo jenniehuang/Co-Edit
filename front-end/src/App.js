@@ -15,9 +15,9 @@ function App() {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="App">
+    <div className="App ">
       <Routes>
-        <Route path="/" element={user ? <Console /> : <Homepage />} />
+        <Route path="/*" element={user ? <Console /> : <Homepage />} />
         <Route
           path="/newdoc"
           exact

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+const { DateTime } = require("luxon");
+const User = require("./user-model");
 const documentSchema = new mongoose.Schema({
   _id: {
     type: String,
@@ -15,11 +16,6 @@ const documentSchema = new mongoose.Schema({
     type: Object,
   },
 
-  time: {
-    type: Date,
-    default: Date.now(),
-  },
-
   hostEmail: {
     type: String,
     required: true,
@@ -29,6 +25,31 @@ const documentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  background: {
+    type: String,
+    default:
+      "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80",
+  },
+  lastModified: {
+    type: Date,
+  },
+});
+
+documentSchema.pre("deleteOne", async function (next) {
+  const deletedId = this.getFilter()["_id"];
+  let subResult = await User.updateMany(
+    { subscribe: { $in: [deletedId] } },
+    { $pull: { subscribe: { $in: [deletedId] } } }
+  );
+  console.log(subResult);
+  let recentResult = await User.updateMany(
+    { "recentlyOpened.docId": deletedId },
+    { $pull: { recentlyOpened: { docId: [deletedId] } } }
+  );
+  console.log(recentResult);
+
+  return next();
 });
 
 module.exports = mongoose.model("Document", documentSchema);

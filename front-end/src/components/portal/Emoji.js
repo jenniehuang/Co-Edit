@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Picker from "emoji-picker-react";
 
-const Emoji = ({ isEmoji, onClose, setChosenEmoji }) => {
+const Emoji = ({ isEmoji, setChosenEmoji, CN }) => {
   if (!isEmoji) return null;
 
   const onEmojiClick = (event, emojiObject) => {
@@ -10,7 +10,7 @@ const Emoji = ({ isEmoji, onClose, setChosenEmoji }) => {
   };
 
   return ReactDOM.createPortal(
-    <div className="fixed left-0 top-1/4">
+    <div className={CN}>
       <Picker onEmojiClick={onEmojiClick} />
     </div>,
     document.getElementById("portal")

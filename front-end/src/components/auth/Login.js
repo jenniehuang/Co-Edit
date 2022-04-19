@@ -76,9 +76,9 @@ const Login = ({ switchHandler }) => {
           className="flex flex-row item-center justify-center w-full h-10 bg-black text-white rounded-lg"
           href={`${process.env.REACT_APP_API_URL_AUTH}/google`}
         >
-          <div className="flex flex-row justify-center items-center ">
-            <img src={google} alt="" />
-            Login with google
+          <div className="flex flex-row justify-center items-center">
+            <img className="mr-2" src={google} alt="" />
+            Continue with google
           </div>
         </a>
 

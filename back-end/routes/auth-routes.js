@@ -8,10 +8,10 @@ const signupValidation = require("../config/joi").signupValidation;
 const loginValidation = require("../config/joi").loginValidation;
 
 //mw
-router.use((req, res, next) => {
-  console.log("coming to auth.");
-  next();
-});
+// router.use((req, res, next) => {
+//   console.log("coming to auth.");
+//   next();
+// });
 
 //------------------------------signup-----------------------------
 router.post("/signup", async (req, res) => {
@@ -50,7 +50,7 @@ router.get(
     const tokenObj = { _id: user.id, email: user.email };
     const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
     res.redirect(
-      `${process.env.SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}`
+      `${process.env.SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}&image=${user.thumbnail}&id=${user.id}`
     );
   }
 );
@@ -80,6 +80,8 @@ router.post("/login", async (req, res) => {
           token: "JWT " + token,
           name: user.name,
           email: user.email,
+          image: user.thumbnail,
+          id: user.id,
         });
       } else {
         console.log(err);

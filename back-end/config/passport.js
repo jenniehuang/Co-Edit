@@ -16,7 +16,6 @@ passport.use(
     },
     //passport callback
     async function (accessToken, refreshToken, profile, cb) {
-      console.log(profile.emails[0].value);
       let foundUser = await User.findOne({ googleID: profile.id });
       if (foundUser) {
         console.log("already exist.");

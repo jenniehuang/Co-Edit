@@ -1,16 +1,48 @@
 const router = require("express").Router();
 const Document = require("../models/document-model");
 const User = require("../models/user-model");
+const { DateTime } = require("luxon");
 
 //mw
-router.use((req, res, next) => {
-  console.log("coming to doc.");
-  next();
-});
+// router.use((req, res, next) => {
+//   console.log("coming to doc.");
+//   next();
+// });
 //------------------------------C-----post-----------------------
 //create in get.
 
 //------------------------------R-----get-----------------------
+router.get("/recentlyOpened", async (req, res) => {
+  const user = await User.findOne({ email: req.user.email });
+  const recentlyOpened = user.recentlyOpened;
+
+  try {
+    const data = await Promise.all(
+      recentlyOpened.map(async (v) => {
+        let doc = await Document.findById(v.docId);
+        console.log(`${req.user.email}per doc ${doc}`);
+        if (!doc) return;
+        let subData = {
+          id: doc._id,
+          title: doc.title,
+          hostName: doc.hostName,
+          time: doc.time,
+          background: doc.background,
+          lastOpened: v.time,
+        };
+        return subData;
+      })
+    );
+    if (!data) {
+      data = [];
+    }
+    console.log(data);
+    res.send(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Sorry, something went wrong.");
+  }
+});
 
 // get docs created by current user.
 router.get("/mydoc", async (req, res) => {
@@ -21,6 +53,8 @@ router.get("/mydoc", async (req, res) => {
     subData.id = v._id;
     subData.title = v.title;
     subData.hostName = v.hostName;
+    subData.background = v.background;
+    subData.lastModified = v.lastModified;
     data.push(subData);
   });
   res.send(data);
@@ -40,17 +74,21 @@ router.get("/shared", async (req, res) => {
           title: doc.title,
           hostName: doc.hostName,
           time: doc.time,
+          background: doc.background,
+          lastModified: doc.lastModified,
         };
         return subData;
       })
     );
+
     res.send(data);
   } catch (e) {
+    console.log(e);
     res.status(500).send("Sorry, something went wrong.");
   }
 });
 
-//get doc's user list.
+//get doc's users list.
 router.get("/users/:_id", async (req, res) => {
   let { _id } = req.params;
   const users = await User.find({ subscribe: _id }).select("name email -_id");
@@ -60,7 +98,6 @@ router.get("/users/:_id", async (req, res) => {
 //get one or create.
 router.get("/:_id", async (req, res) => {
   let { _id } = req.params;
-  console.log(_id);
   const doc = await Document.findById(_id);
 
   if (doc) {
@@ -78,6 +115,7 @@ router.get("/:_id", async (req, res) => {
       data: "",
       hostEmail: req.user.email,
       hostName: req.user.name,
+      lastModified: DateTime.utc(),
     });
     res.status(200).send(newDoc);
   }
@@ -98,7 +136,7 @@ router.patch("/access", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).send("User not found!");
 
-    if (user.subscribe.includes(docId)) {
+    if (user.subscribe.includes(docId) | (email === hostEmail)) {
       res.status(400).send("This user already joined this document!");
     } else {
       user.subscribe.push(docId);
@@ -114,8 +152,6 @@ router.patch("/access", async (req, res) => {
 router.patch("/remove", async (req, res) => {
   let { email, docId } = req.body;
   let hostEmail = req.user.email;
-  console.log(email);
-  console.log(docId);
 
   try {
     const doc = await Document.findById(docId);
@@ -143,7 +179,6 @@ router.patch("/remove", async (req, res) => {
 router.delete("/:_id", async (req, res) => {
   let { _id } = req.params;
   let hostEmail = req.user.email;
-  console.log(_id);
   const doc = await Document.findById(_id);
   if (!doc) return res.status(404).send("document not found!");
   if (doc.hostEmail !== hostEmail)
@@ -151,9 +186,9 @@ router.delete("/:_id", async (req, res) => {
 
   try {
     const result = await Document.deleteOne({ _id });
-    console.log(result);
     res.status(200).send("Document deleted!");
   } catch (e) {
+    console.log(e);
     res.status(500).send("Sorry, something went wrong.");
   }
 });

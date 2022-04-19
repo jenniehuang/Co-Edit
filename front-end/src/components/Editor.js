@@ -10,10 +10,16 @@ import DocServices from "../services/doc-services";
 import Delete from "./portal/Delete";
 import UserList from "./portal/UserList";
 import Emoji from "./portal/Emoji";
+import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
+import QuillCursors from "quill-cursors";
+import OnlineList from "./portal/OnlineList";
 
-// import QuillCursors from "quill-cursors";
+import { CSS_COLOR_NAMES, totalColors } from "../utils/CSS_COLORS";
+import sync from "../images/sync.png";
+import users from "../images/users.png";
 
-// Quill.register("modules/cursors", QuillCursors);
+Quill.register("modules/cursors", QuillCursors);
 
 const SAVE_INTERVAL_MS = 2000;
 const TOOLBAR_OPTIONS = [
@@ -29,20 +35,55 @@ const TOOLBAR_OPTIONS = [
 ];
 
 const Editor = () => {
+  const colorIndex = Math.floor(Math.random() * (totalColors + 1));
   const { user } = useSelector((state) => state.auth);
   const { id: documentId } = useParams();
-  const [socket, setSocket] = useState();
+  const [socket, setSocket] = useState(null);
   const [quill, setQuill] = useState();
   const [docTitle, setDocTitle] = useState("");
+  const [docBackground, setBackground] = useState("");
   const [hostEmail, setHostEmail] = useState("");
-  const [isAuthorized, setIsAuthorized] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isDelete, setIsDelete] = useState(false);
   const [isOpenList, setIsOpenList] = useState(false);
   const [isEmoji, setIsEmoji] = useState(false);
   const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [docUsers, setDocUsers] = useState([]);
+  let usersCount = docUsers.length;
+  const [isOnlineList, setIsOnlineList] = useState(false);
+  const [cursors, setCursors] = useState(null);
+  const [cursorColor, setCursorColor] = useState(CSS_COLOR_NAMES[colorIndex]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveText, setSaveText] = useState("Saving...");
+  const [cnx, setCnx] = useState(null);
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  //-----------------------------------------
+
+  //-----------------------------------------
+  useEffect(() => {
+    if (!user) {
+      setIsAuthorized(false);
+      setErrorMsg(`${t("noLogin")}`);
+      return;
+    }
+    if (!isAuthorized) return;
+
+    const s = io(process.env.REACT_APP_SOCKET);
+    setSocket(s);
+    s.emit("get-document", documentId, user.email);
+    setTimeout(() => {
+      setCnx(s.connected);
+    }, 300);
+    return () => {
+      s.disconnect();
+    };
+  }, [isAuthorized]);
+
+  //-------------------------------------------
 
   useEffect(() => {
     if (!chosenEmoji) return;
@@ -50,77 +91,93 @@ const Editor = () => {
     const range = quill.getSelection();
     if (range) {
       if (range.length == 0) {
-        console.log("User cursor is at index", range.index);
-        quill.insertText(range.index, emoji);
+        let delta = quill.insertText(range.index, emoji);
+        socket.emit("send-changes", delta);
       } else {
-        var text = quill.getText(range.index, range.length);
-        console.log("User has highlighted: ", text);
+        let delta = quill.deleteText(range.index, range.length);
+        socket.emit("send-changes", delta);
+        let delta2 = quill.insertText(range.index, emoji);
+        socket.emit("send-changes", delta2);
       }
     } else {
       return;
     }
   }, [chosenEmoji]);
 
+  //----------------------------------------------------
+
   useEffect(() => {
-    if (!user) {
+    if (!socket || !quill) return;
+
+    socket.on("just-joined", (username) => {
+      toast.success(`${username} ${t("join")}`);
+    });
+
+    socket.on("just-left", (username, userEmail) => {
+      toast.info(`${username} ${t("left")}`);
+      cursors.removeCursor(userEmail);
+    });
+
+    socket.on("all-users", (users) => {
+      setDocUsers(users);
+    });
+
+    socket.on("remove-user", (deleteEmail) => {
+      if (user.email === deleteEmail) {
+        setIsAuthorized(false);
+        setErrorMsg(`${t("unAuth")}`);
+        quill.disable();
+        socket.disconnect();
+      } else {
+        return;
+      }
+    });
+
+    socket.on("disconnect", () => {
       setIsAuthorized(false);
-      setErrorMsg("Sorry! you have to login first.");
+      setErrorMsg(`${t("lostCnx")}`);
+      quill.disable();
+    });
 
-      return;
-    }
-    const s = io(process.env.REACT_APP_SOCKET);
-    setSocket(s);
+    socket.on("send-title", (title) => {
+      setDocTitle(title);
+      console.log(title);
+    });
+  }, [socket, quill]);
 
-    return () => {
-      s.disconnect();
-    };
-  }, []);
+  //----------------------------------------------------
 
   //---------------------get doc------------------------
   useEffect(() => {
-    if (!socket || !quill) return;
+    if (!quill | !user) return;
 
     const loadDoc = async () => {
       try {
         let response = await DocServices.getOneOrCreate(documentId);
         let docInfo = response.data;
+        setIsAuthorized(true);
         setDocTitle(docInfo.title);
         setHostEmail(docInfo.hostEmail);
+        setBackground(docInfo.background);
         quill.setContents(docInfo.data);
         quill.enable();
-        // const cursors = quill.getModule("cursors");
-        // cursors.createCursor(`${user.email}`, `${user.name}`, "blue");
-        // console.log(cursors);
       } catch (err) {
-        console.log(err);
         setIsAuthorized(false);
-        setErrorMsg(err.response.data);
+        let code = err.response.status;
+        let msg = `doc_${code}`;
+        setErrorMsg(`${t(msg)}`);
         quill.disable();
         socket.disconnect();
+        setSocket(null);
         return null;
       }
     };
 
-    socket.emit("get-document", documentId);
     loadDoc();
 
     //go to the room or get the create doc for us.
   }, [socket, quill, documentId]);
   //------------------------------------------------------
-
-  //-----------save doc real time-----------------
-
-  useEffect(() => {
-    if (!socket || !quill) return;
-
-    const saveInterval = setInterval(() => {
-      socket.emit("save-document", quill.getContents());
-    }, SAVE_INTERVAL_MS);
-
-    return () => {
-      clearInterval(saveInterval);
-    };
-  }, [socket, quill]);
 
   //-----------updating doc with changes from other client.---------
   useEffect(() => {
@@ -137,15 +194,47 @@ const Editor = () => {
       quill.off("receive-changes", receiveHandler);
     };
   }, [socket, quill]);
-
-  //---------------------send changes----------------------
+  //-------------------------update cursor------------------------
   useEffect(() => {
     if (!socket || !quill) return;
 
+    const cursorHandler = (index, id, name, color) => {
+      cursors.createCursor(id, name, color);
+      cursors.moveCursor(id, index);
+    };
+
+    // this is the event i setup on the server.
+    socket.on("receive-cursor", cursorHandler);
+
+    return () => {
+      quill.off("receive-cursor", cursorHandler);
+    };
+  }, [socket, quill]);
+
+  //---------------------send changes and cursor and saveDebounce----------------------
+  useEffect(() => {
+    if (!socket || !quill) return;
+    const saveDebounce = debounce(() => {
+      socket.emit("save-document", quill.getContents());
+      setSaveText("Saved!");
+      setTimeout(() => {
+        setIsSaving(false);
+        setSaveText("Saving...");
+      }, 1000);
+    }, 800);
+
     const changeHandler = (delta, oldDelta, source) => {
       if (source !== "user") return;
+      setIsSaving(true);
       socket.emit("send-changes", delta);
+      saveDebounce();
     };
+
+    quill.on("selection-change", function (range, oldRange, source) {
+      if (range) {
+        socket.emit("send-cursor", range, user.id, user.name, cursorColor);
+      } else return;
+    });
 
     quill.on("text-change", changeHandler);
 
@@ -165,7 +254,7 @@ const Editor = () => {
       theme: "snow",
       modules: {
         toolbar: TOOLBAR_OPTIONS,
-        // cursors: { transformOnTextChange: true },
+        cursors: { transformOnTextChange: true },
       },
     });
 
@@ -173,6 +262,8 @@ const Editor = () => {
     q.setText("Loading...");
 
     setQuill(q);
+    const c = q.getModule("cursors");
+    setCursors(c);
   }, []);
 
   const titleChange = (e) => {
@@ -181,8 +272,7 @@ const Editor = () => {
     }
   };
 
-  const submitTitle = (e) => {
-    e.preventDefault();
+  const submitTitle = () => {
     socket.emit("save-title", docTitle);
     toast.success("Title saved!");
   };
@@ -205,12 +295,14 @@ const Editor = () => {
 
   return (
     <>
-      {!isAuthorized && (
+      {isAuthorized === false && (
         <>
-          <div className="fixed left-0 ring-0 top-0 bottom-0 bg-black bg-opacity-80 z-10 "></div>
-          <div className="fixed flex flex-col items-center p-6 top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2 bg-black text-white w-2/5 z-20 rounded-xl shadow-xl">
+          <div className="fixed left-0 ring-0 top-0 bottom-0 bg-black bg-opacity-80 "></div>
+          <div className="fixed flex flex-col items-center p-6 top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2 bg-black text-white w-full md:w-2/5 z-20 rounded-xl shadow-xl">
             <div className=" text-5xl">⛔</div>
-            <div className=" text-2xl font-semibold font-mono ">{errorMsg}</div>
+            <div className=" m-2 text-2xl font-semibold font-mono ">
+              {errorMsg}
+            </div>
             <div
               onClick={() => {
                 navigate("/");
@@ -230,32 +322,62 @@ const Editor = () => {
           setIsDelete(false);
         }}
       />
-      <UserList
-        documentId={documentId}
-        isOpenList={isOpenList}
-        onClose={() => {
-          setIsOpenList(false);
-        }}
-      />
+      {user && (
+        <UserList
+          socket={socket}
+          documentId={documentId}
+          isOpenList={isOpenList}
+          onClose={() => {
+            setIsOpenList(!isOpenList);
+          }}
+        />
+      )}
       <Emoji
+        CN={"fixed left-0 top-2/4 "}
         isEmoji={isEmoji}
         setChosenEmoji={setChosenEmoji}
-        onClose={() => {
-          setIsEmoji(false);
-        }}
       />
+      {user && (
+        <OnlineList
+          isOnlineList={isOnlineList}
+          docUsers={docUsers}
+          hostEmail={hostEmail}
+          currentUser={user.email}
+        />
+      )}
+
+      {isAuthorized && (
+        <>
+          <img
+            onClick={() => {
+              setIsOnlineList(!isOnlineList);
+            }}
+            className=" w-12 flex justify-center items-center fixed bottom-8 right-8 z-20 cursor-pointer shadow-2xl"
+            src={users}
+            alt=""
+          />
+          <div className="fixed bottom-6 right-6 text-2xl z-30">
+            {usersCount}
+          </div>
+        </>
+      )}
 
       <div style={isAuthorized ? {} : NOT_AUTHORIZED_STYLE}>
-        <div className=" w-1000px md:w-full bg-primary sticky top-0 justify-between flex flex-row p-3 z-40">
+        <div className=" w-1000px tablet:w-full bg-primary sticky top-0 justify-between flex flex-row p-3 z-20">
           <div className="flex items-center">
             <div className=" text-2xl">📝</div>
-            <form onSubmit={submitTitle}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
               <input
                 title="Change Title"
-                className=" text-black bg-transparent h-full text-xl border-none p-2 hover:border-2 hover:border-borderColor focus:border-2 focus:border-borderColor"
+                className=" w-60 text-black bg-transparent h-full text-xl border-none p-2 hover:border-2 hover:border-borderColor focus:border-2 focus:border-borderColor"
                 type="text"
                 value={docTitle}
                 onChange={titleChange}
+                onBlur={submitTitle}
               />
             </form>
             <div
@@ -266,10 +388,16 @@ const Editor = () => {
             >
               😎
             </div>
+            {isSaving && (
+              <div className=" flex flex-col justify-center items-center ml-4">
+                <img src={sync} alt="" className="  w-6" />
+                <span className=" text-sm">{saveText}</span>
+              </div>
+            )}
           </div>
           {user && hostEmail === user.email && (
             <div className="flex flex-row items-center justify-between">
-              <form onSubmit={grantAccess}>
+              <form className="flex items-center" onSubmit={grantAccess}>
                 <input
                   className=" h-full text-xs border-none p-2 text-black"
                   ref={accessInputRef}
@@ -299,33 +427,14 @@ const Editor = () => {
             </div>
           )}
         </div>
-        <div className="w-1000px md:w-screen" ref={wrapperRef}></div>
+        <div
+          className="CONTAINER w-1000px md:w-full bg-cover bg-no-repeat bg-center "
+          style={{ backgroundImage: `url(${docBackground})` }}
+          ref={wrapperRef}
+        ></div>
       </div>
     </>
   );
 };
 
 export default Editor;
-
-//65da2739-0f08-49e9-8c0d-7b3b9d602024
-
-/*
-
- const submitTitle = (e) => {
-      e.preventDefault();
-      setDocTitle(titleInput.value);
-      socket.emit("save-title", docTitle);
-      console.log("123");
-    };
-
-    const titleForm = document.createElement("form");
-    const titleInput = document.createElement("input");
-    titleInput.classList.add("title-input");
-    titleInput.value = docTitle;
-    titleForm.appendChild(titleInput);
-    titleForm.onsubmit = submitTitle;
-    const toolbar = document.querySelector(".ql-toolbar");
-    const firstChild = document.querySelector(".ql-formats");
-    toolbar.insertBefore(titleForm, firstChild);
-
-*/

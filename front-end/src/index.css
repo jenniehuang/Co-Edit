@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 .item {
-  @apply w-60  md:w-full p-3 text-xl my-4 mx-2 text-white flex items-center bg-zinc-500 rounded-md shadow-xl cursor-pointer;
+  @apply w-full border  p-1 hover:bg-black hover:bg-opacity-20 cursor-pointer hover:font-semibold;
 }
 
 .ql-toolbar {
-  @apply print:hidden w-1000px md:w-full flex justify-center sticky top-16 bg-primary border-none shadow-md z-50;
+  @apply print:hidden w-1000px tablet:w-full flex justify-center sticky top-16 bg-primary border-none shadow-md z-50;
 }
 .ql-container {
-  @apply bg-primary print:hidden w-1000px md:w-full border-none flex justify-center;
+  @apply bg-primary print:hidden w-1000px tablet:w-full border-none flex justify-center;
 }
 .ql-editor {
   @apply bg-white font-serif w-8.5in min-h-11in m-4 shadow-md p-1in;

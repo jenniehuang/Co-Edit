@@ -2,6 +2,7 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      display: ["group-hover"],
       backgroundImage: {
         homepage: "url('../src/images/bg.jpg')",
       },
@@ -11,6 +12,11 @@ module.exports = {
       width: {
         "1000px": "1000px",
         "8.5in": "8.5in",
+        "200px": "200px",
+      },
+      height: {
+        "30vh": "30vh",
+        "11in": "11in",
       },
       minHeight: {
         "11in": "11in",
@@ -25,6 +31,10 @@ module.exports = {
       borderRadius: {
         "50px": "50px",
       },
+      screens: {
+        tablet: "900px",
+      },
+      borderStyle: ["hover"],
     },
   },
   plugins: [],

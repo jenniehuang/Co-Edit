@@ -29,3 +29,5 @@ note.txt
 **/*.sh
 **/Dockerfile
 **/*.yaml
+**/firebase
+

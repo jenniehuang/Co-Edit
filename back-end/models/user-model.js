@@ -21,12 +21,27 @@ const userSchema = new mongoose.Schema({
   },
   thumbnail: {
     type: String,
+    default:
+      "https://cdn4.iconfinder.com/data/icons/music-ui-solid-24px/24/user_account_profile-2-512.png",
   },
   date: {
     type: Date,
     default: Date.now,
   },
   subscribe: {
+    type: [String],
+    default: [],
+  },
+  recentlyOpened: {
+    type: [
+      {
+        docId: String,
+        time: Date,
+      },
+    ],
+    default: [],
+  },
+  pined: {
     type: [String],
     default: [],
   },
