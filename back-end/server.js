@@ -50,14 +50,14 @@ io.on("connection", (socket) => {
     const foundUser = await User.findOne({ email: userEmail });
     let exists = false;
     foundUser.recentlyOpened.map((v, i) => {
-      if (v.docId === documentId) {
+      if (v._id === documentId) {
         foundUser.recentlyOpened[i].time = DateTime.utc();
         exists = true;
       }
     });
     if (!exists) {
       let info = {
-        docId: documentId,
+        _id: documentId,
         time: DateTime.utc(),
       };
       foundUser.recentlyOpened.push(info);
@@ -109,10 +109,14 @@ io.on("connection", (socket) => {
       socket.broadcast.to(documentId).emit("remove-user", deleteEmail);
     });
 
+    socket.on("delete-doc", (deleteDoc) => {
+      io.in(deleteDoc).disconnectSockets();
+    });
+
     socket.on("disconnect", () => {
       socket.broadcast
         .to(documentId)
-        .emit("just-left", foundUser.name, foundUser.email);
+        .emit("just-left", foundUser.name, foundUser.id);
       allUsers = allUsers.filter((v) => v.userEmail !== userEmail);
       let NewDocUsers = allUsers.filter((v) => v.docId === documentId);
       io.to(documentId).emit("all-users", NewDocUsers);

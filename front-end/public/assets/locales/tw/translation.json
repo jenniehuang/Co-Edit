@@ -31,5 +31,6 @@
   "doc_403": "抱歉,您沒有權限閱讀此文件",
   "lostCnx": "抱歉，您已與伺服器斷線",
   "recentlyChanged": "最近修改",
-  "recentlyOpened": "最近打開"
+  "recentlyOpened": "最近打開",
+  "docDelete": "抱歉，此文件已被作者刪除"
 }

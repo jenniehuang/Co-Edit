@@ -7,12 +7,6 @@ const User = require("../models/user-model");
 const signupValidation = require("../config/joi").signupValidation;
 const loginValidation = require("../config/joi").loginValidation;
 
-//mw
-// router.use((req, res, next) => {
-//   console.log("coming to auth.");
-//   next();
-// });
-
 //------------------------------signup-----------------------------
 router.post("/signup", async (req, res) => {
   //validating data
@@ -91,18 +85,4 @@ router.post("/login", async (req, res) => {
   });
 });
 
-router.get("/testAPI", (req, res) => {
-  const mesgObj = {
-    message: "test is working",
-  };
-
-  return res.json(mesgObj);
-});
-
 module.exports = router;
-
-/*
-
-
-
-*/

@@ -14,25 +14,14 @@ import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
 import QuillCursors from "quill-cursors";
 import OnlineList from "./portal/OnlineList";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
 
 import { CSS_COLOR_NAMES, totalColors } from "../utils/CSS_COLORS";
 import sync from "../images/sync.png";
 import users from "../images/users.png";
 
 Quill.register("modules/cursors", QuillCursors);
-
-const SAVE_INTERVAL_MS = 2000;
-const TOOLBAR_OPTIONS = [
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  [{ font: [] }],
-  [{ list: "ordered" }, { list: "bullet" }],
-  ["bold", "italic", "underline"],
-  [{ color: [] }, { background: [] }],
-  [{ script: "sub" }, { script: "super" }],
-  [{ align: [] }],
-  ["image", "blockquote", "code-block"],
-  ["clean"],
-];
 
 const Editor = () => {
   const colorIndex = Math.floor(Math.random() * (totalColors + 1));
@@ -56,14 +45,32 @@ const Editor = () => {
   const [cursorColor, setCursorColor] = useState(CSS_COLOR_NAMES[colorIndex]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveText, setSaveText] = useState("Saving...");
-  const [cnx, setCnx] = useState(null);
+  const [uploadURL, setUploadURL] = useState(null);
 
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  //-----------------------------------------
+  //----------------------upload picture-----------------
+  useEffect(() => {
+    if (!uploadURL) return;
+    const range = quill.getSelection();
+    if (range) {
+      if (range.length == 0) {
+        let delta = quill.insertEmbed(range.index, "image", uploadURL);
+        socket.emit("send-changes", delta);
+      } else {
+        let delta = quill.deleteText(range.index, range.length);
+        socket.emit("send-changes", delta);
+        let delta2 = quill.insertEmbed(range.index, "image", uploadURL);
+        socket.emit("send-changes", delta2);
+      }
+    } else {
+      return;
+    }
+    socket.emit("save-document", quill.getContents());
+  }, [uploadURL]);
 
-  //-----------------------------------------
+  //--------------------socket connect---------------------
   useEffect(() => {
     if (!user) {
       setIsAuthorized(false);
@@ -75,15 +82,13 @@ const Editor = () => {
     const s = io(process.env.REACT_APP_SOCKET);
     setSocket(s);
     s.emit("get-document", documentId, user.email);
-    setTimeout(() => {
-      setCnx(s.connected);
-    }, 300);
+
     return () => {
       s.disconnect();
     };
   }, [isAuthorized]);
 
-  //-------------------------------------------
+  //--------------------emoji palate--------------------
 
   useEffect(() => {
     if (!chosenEmoji) return;
@@ -104,7 +109,7 @@ const Editor = () => {
     }
   }, [chosenEmoji]);
 
-  //----------------------------------------------------
+  //---------send user join/left/all users-------------------------
 
   useEffect(() => {
     if (!socket || !quill) return;
@@ -113,9 +118,9 @@ const Editor = () => {
       toast.success(`${username} ${t("join")}`);
     });
 
-    socket.on("just-left", (username, userEmail) => {
+    socket.on("just-left", (username, userId) => {
       toast.info(`${username} ${t("left")}`);
-      cursors.removeCursor(userEmail);
+      cursors.removeCursor(userId);
     });
 
     socket.on("all-users", (users) => {
@@ -253,7 +258,22 @@ const Editor = () => {
     const q = new Quill(editor, {
       theme: "snow",
       modules: {
-        toolbar: TOOLBAR_OPTIONS,
+        toolbar: {
+          container: [
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            [{ font: [] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["bold", "italic", "underline"],
+            [{ color: [] }, { background: [] }],
+            [{ script: "sub" }, { script: "super" }],
+            [{ align: [] }],
+            ["image", "blockquote", "code-block"],
+            ["clean"],
+          ],
+          handlers: {
+            image: imageHandler,
+          },
+        },
         cursors: { transformOnTextChange: true },
       },
     });
@@ -265,6 +285,40 @@ const Editor = () => {
     const c = q.getModule("cursors");
     setCursors(c);
   }, []);
+
+  // const imageHandler = () => {
+
+  // };
+  function imageHandler() {
+    console.log(this);
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.click();
+
+    // Listen upload local image and save to server
+    input.onchange = async () => {
+      const file = input.files[0];
+      console.log(file);
+
+      // file type is only image.
+      if (/^image\//.test(file.type)) {
+        const imageRef = ref(
+          storage,
+          `docImages/${documentId}/imgs/${file.name}`
+        );
+        try {
+          await uploadBytes(imageRef, file);
+          let url = await getDownloadURL(imageRef);
+          setUploadURL(url);
+        } catch (e) {
+          console.log(e);
+          toast.error(e);
+        }
+      } else {
+        console.warn("You could only upload images.");
+      }
+    };
+  }
 
   const titleChange = (e) => {
     if (e.target.value !== docTitle) {
@@ -315,6 +369,7 @@ const Editor = () => {
         </>
       )}
       <Delete
+        socket={socket}
         isDelete={isDelete}
         docTitle={docTitle}
         documentId={documentId}

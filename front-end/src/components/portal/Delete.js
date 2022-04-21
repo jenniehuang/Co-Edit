@@ -14,7 +14,7 @@ const overlay_style = {
   backgroundColor: "rgba(0,0,0,0.7)",
 };
 
-const Delete = ({ isDelete, onClose, docTitle, documentId }) => {
+const Delete = ({ isDelete, onClose, docTitle, documentId, socket }) => {
   const { t } = useTranslation();
 
   const docTitleRef = useRef();
@@ -28,6 +28,7 @@ const Delete = ({ isDelete, onClose, docTitle, documentId }) => {
     let inputDocTitle = docTitleRef.current.value;
     if (inputDocTitle === docTitle) {
       let result = await DocServices.delete(documentId);
+      socket.emit("delete-doc", documentId);
       toast.success(result.data);
       navigate("/");
     } else {

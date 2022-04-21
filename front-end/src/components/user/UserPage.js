@@ -110,6 +110,7 @@ const UserPage = () => {
       </div>
       <div className=" group flex flex-col justify-center items-center w-24 absolute left-6 top-[calc(30vh_-_36px)]">
         <img
+          referrerPolicy="no-referrer"
           className=" rounded-full border-2 border-white"
           src={currentThumbnail}
           alt=""

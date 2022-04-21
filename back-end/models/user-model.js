@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
   recentlyOpened: {
     type: [
       {
-        docId: String,
+        _id: String,
         time: Date,
       },
     ],

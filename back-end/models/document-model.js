@@ -42,12 +42,10 @@ documentSchema.pre("deleteOne", async function (next) {
     { subscribe: { $in: [deletedId] } },
     { $pull: { subscribe: { $in: [deletedId] } } }
   );
-  console.log(subResult);
   let recentResult = await User.updateMany(
     { "recentlyOpened.docId": deletedId },
-    { $pull: { recentlyOpened: { docId: [deletedId] } } }
+    { $pull: { recentlyOpened: { _id: [deletedId] } } }
   );
-  console.log(recentResult);
 
   return next();
 });

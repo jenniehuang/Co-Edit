@@ -19,8 +19,7 @@ router.get("/recentlyOpened", async (req, res) => {
   try {
     const data = await Promise.all(
       recentlyOpened.map(async (v) => {
-        let doc = await Document.findById(v.docId);
-        console.log(`${req.user.email}per doc ${doc}`);
+        let doc = await Document.findById(v._id);
         if (!doc) return;
         let subData = {
           id: doc._id,
@@ -36,7 +35,6 @@ router.get("/recentlyOpened", async (req, res) => {
     if (!data) {
       data = [];
     }
-    console.log(data);
     res.send(data);
   } catch (e) {
     console.log(e);
@@ -166,10 +164,12 @@ router.patch("/remove", async (req, res) => {
       res.status(400).send("This is not in the list.");
     } else {
       user.subscribe.pull(docId);
+      user.recentlyOpened.pull({ docId });
       await user.save();
       res.status(200).send("User removed!");
     }
   } catch (e) {
+    console.log(e);
     res.status(500).send("Sorry, something went wrong.");
   }
 });

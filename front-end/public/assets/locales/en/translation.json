@@ -31,5 +31,6 @@
   "doc_403": "Sorry! You are not authorized to access this document.",
   "lostCnx": "sorry you lost your connection.",
   "recentlyChanged": "Recently changed",
-  "recentlyOpened": "Recently opened"
+  "recentlyOpened": "Recently opened",
+  "docDelete": "Sorry, this document just been deleted."
 }
