@@ -20,7 +20,7 @@ const Console = () => {
   return (
     <div className="flex flex-row w-full h-screen overflow-x-hidden">
       {isMenuOpen && (
-        <div className="fixed w-60 h-screen bg-primary top-0 z-50 origin-left transition duration-500 ease-in-out">
+        <div className="fixed w-60 h-screen bg-primary top-0 z-50 origin-left transition-all ease-out duration-700">
           <div
             onClick={() => {
               navigate("/");

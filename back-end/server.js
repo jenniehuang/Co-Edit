@@ -1,4 +1,6 @@
 const express = require("express");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv").config();
 const authRoute = require("./routes/auth-routes");
 const docRoute = require("./routes/doc-routes");
@@ -8,15 +10,34 @@ const User = require("./models/user-model");
 const cors = require("cors");
 const connectDB = require("./config/mongodb");
 const passport = require("passport");
-const { date } = require("joi");
 const { DateTime } = require("luxon");
 require("./config/passport")(passport);
 
 const app = express();
 connectDB();
 
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "co-edit API",
+      version: "1.0.0",
+      description: "co-edit API documentation",
+    },
+    server: [
+      {
+        url: process.env.SERVER_URI,
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+const specs = swaggerJsdoc(options);
+
 // MW
 app.use(cors());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 //bodyparser for json
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

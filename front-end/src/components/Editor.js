@@ -354,7 +354,7 @@ const Editor = () => {
           <div className="fixed left-0 ring-0 top-0 bottom-0 bg-black bg-opacity-80 "></div>
           <div className="fixed flex flex-col items-center p-6 top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2 bg-black text-white w-full md:w-2/5 z-20 rounded-xl shadow-xl">
             <div className=" text-5xl">⛔</div>
-            <div className=" m-2 text-2xl font-semibold font-mono ">
+            <div className=" my-8 text-2xl font-semibold font-mono ">
               {errorMsg}
             </div>
             <div
