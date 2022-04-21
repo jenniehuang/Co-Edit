@@ -5,6 +5,7 @@ import Signup from "./auth/Signup";
 import Loading from "./Loading";
 import Nav from "./Nav";
 import bg from "../images/bg.jpg";
+import hp1 from "../images/hp1.png";
 
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +13,7 @@ const Homepage = () => {
   const [loginMode, setLoginMode] = useState(true);
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [isBgLoaded, setIsBgLoaded] = useState(false);
+  // const [isBgLoaded, setIsBgLoaded] = useState(false);
 
   const navigate = useNavigate();
 
@@ -51,46 +52,32 @@ const Homepage = () => {
 
   return (
     <div className="font-serif ">
-      <img
-        onLoad={(e) => {
-          if (e.type === "load") {
-            setTimeout(() => {
-              setIsBgLoaded(true);
-            }, 1000);
-          }
-        }}
-        className=" absolute -z-10 h-screen w-screen object-cover"
-        src={bg}
-        alt=""
-      />
-      {isBgLoaded && (
-        <>
-          <Nav />
-          <div className="w-full flex flex-row items-center">
-            <div className=" md:w-1/2 "></div>
+      <>
+        <Nav CN={`lg:px-40 bg-white text-black`} />
+        <div className=" lg:px-40 w-full flex flex-col md:flex-row items-center mt-16">
+          <div className="w-full md:w-1/2 leading-10 text-5xl m-8 md:text-4xl lg:text-6xl xl:text-8xl  ">
+            {t("welcomeSlogan")}
+          </div>
 
-            <div className="w-full md:w-1/2  backdrop-filter backdrop-blur-md rounded-md mt-5 ">
-              <div className=" leading-10 text-white text-5xl m-8 md:text-4xl lg:text-6xl xl:text-8xl  ">
-                {t("welcomeSlogan")}
-              </div>
-              <div className=" bg-white m-8 right-0 rounded-md ">
-                <div className="p-4 text-4xl">{t("joinUs")}</div>
-                {loginMode && <Login switchHandler={switchHandler} />}
-                {!loginMode && <Signup switchHandler={switchHandler} />}
-              </div>
+          <div className="w-full md:w-1/2  rounded-md  ">
+            123
+            <div className=" bg-white m-8 right-0 rounded-md shadow-xl ">
+              <div className="p-4 text-4xl">{t("joinUs")}</div>
+              {loginMode && <Login switchHandler={switchHandler} />}
+              {!loginMode && <Signup switchHandler={switchHandler} />}
             </div>
           </div>
-        </>
-      )}
-      {!isBgLoaded && (
-        <div className="fixed top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2 flex flex-row text-5xl">
-          Loading...
-          <svg
-            className="animate-spin h-10 w-10 mr-3 bg-slate-900"
-            viewBox="0 0 24 24"
-          ></svg>
         </div>
-      )}
+        <div className=" lg:px-40 w-full flex flex-col md:flex-row items-center mt-16 border-b border-black">
+          <div className="w-full md:w-1/3 leading-10 text-5xl m-8 md:text-4xl lg:text-6xl   ">
+            Team up without the chaos
+          </div>
+
+          <div className="w-full md:w-1/2  rounded-md ">
+            <img src={hp1} alt="" />
+          </div>
+        </div>
+      </>
     </div>
   );
 };

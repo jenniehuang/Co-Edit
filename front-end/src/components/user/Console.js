@@ -79,6 +79,7 @@ const Console = () => {
           setIsMenuOpen={setIsMenuOpen}
           isMenuOpen={isMenuOpen}
           setIsShown={setIsShown}
+          CN={`bg-gray-600 bg-opacity-50 pr-2`}
         />
 
         <div className="w-full mt-12">
