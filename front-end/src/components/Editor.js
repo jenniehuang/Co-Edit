@@ -20,7 +20,7 @@ import { storage } from "../firebase";
 import { CSS_COLOR_NAMES, totalColors } from "../utils/CSS_COLORS";
 import sync from "../images/sync.png";
 import users from "../images/users.png";
-
+import pdf from "../images/pdf.png";
 Quill.register("modules/cursors", QuillCursors);
 
 const Editor = () => {
@@ -92,6 +92,8 @@ const Editor = () => {
 
   useEffect(() => {
     if (!chosenEmoji) return;
+    console.log(quill.root.innerHTML);
+
     const emoji = chosenEmoji.emoji;
     const range = quill.getSelection();
     if (range) {
@@ -168,6 +170,7 @@ const Editor = () => {
         quill.enable();
       } catch (err) {
         setIsAuthorized(false);
+        console.log(err);
         let code = err.response.status;
         let msg = `doc_${code}`;
         setErrorMsg(`${t(msg)}`);
@@ -290,7 +293,6 @@ const Editor = () => {
 
   // };
   function imageHandler() {
-    console.log(this);
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.click();
@@ -298,7 +300,6 @@ const Editor = () => {
     // Listen upload local image and save to server
     input.onchange = async () => {
       const file = input.files[0];
-      console.log(file);
 
       // file type is only image.
       if (/^image\//.test(file.type)) {
@@ -341,6 +342,10 @@ const Editor = () => {
     } catch (err) {
       toast.error(err.response.data);
     }
+  };
+
+  const exportPDF = () => {
+    window.print();
   };
 
   const NOT_AUTHORIZED_STYLE = {
@@ -407,18 +412,18 @@ const Editor = () => {
             onClick={() => {
               setIsOnlineList(!isOnlineList);
             }}
-            className=" w-12 flex justify-center items-center fixed bottom-8 right-8 z-20 cursor-pointer shadow-2xl"
+            className=" w-12 flex justify-center items-center fixed bottom-8 right-8 z-20 cursor-pointer shadow-2xl print:hidden"
             src={users}
             alt=""
           />
-          <div className="fixed bottom-6 right-6 text-2xl z-30">
+          <div className="fixed bottom-6 right-6 text-2xl z-30 print:hidden">
             {usersCount}
           </div>
         </>
       )}
 
       <div style={isAuthorized ? {} : NOT_AUTHORIZED_STYLE}>
-        <div className=" w-1000px tablet:w-full bg-primary sticky top-0 justify-between flex flex-row p-3 z-20">
+        <div className=" w-1000px tablet:w-full bg-primary sticky top-0 justify-between flex flex-row p-3 z-20 print:hidden">
           <div className="flex items-center">
             <div className=" text-2xl">📝</div>
             <form
@@ -449,6 +454,12 @@ const Editor = () => {
                 <span className=" text-sm">{saveText}</span>
               </div>
             )}
+            <img
+              onClick={exportPDF}
+              src={pdf}
+              alt=""
+              className=" cursor-pointer w-8 ml-8"
+            />
           </div>
           {user && hostEmail === user.email && (
             <div className="flex flex-row items-center justify-between">

@@ -6,6 +6,17 @@ import Loading from "./Loading";
 import Nav from "./Nav";
 import bg from "../images/bg.jpg";
 import hp1 from "../images/hp1.png";
+import meeting from "../images/meeting.png";
+import miro from "../images/miro.png";
+import mobile from "../images/mobile.png";
+import secure from "../images/secure.png";
+import exportImg from "../images/export.png";
+import github from "../images/github.png";
+import linkedin from "../images/linkedin.png";
+import res from "../images/res.png";
+import exportPDF from "../images/exportPDF.png";
+import curs from "../images/curs.png";
+import privacy from "../images/privacy.gif";
 
 import { useTranslation } from "react-i18next";
 
@@ -53,14 +64,19 @@ const Homepage = () => {
   return (
     <div className="font-serif ">
       <>
-        <Nav CN={`lg:px-40 bg-white text-black`} />
-        <div className=" lg:px-40 w-full flex flex-col md:flex-row items-center mt-16">
-          <div className="w-full md:w-1/2 leading-10 text-5xl m-8 md:text-4xl lg:text-6xl xl:text-8xl  ">
-            {t("welcomeSlogan")}
+        <Nav CN={`lg:px-40 bg-white text-black border-b border-primary`} />
+        {/*  */}
+        <div className=" outer mt-32  md:mt-0">
+          <div className="md:w-1/2 innerT ">
+            <p className="topP1 md:text-6xl "> {t("welcomeSlogan")}</p>
+            <p className="topP2 ">
+              Co-edit allows you to co-editing the same document with others
+              online in real-time.
+            </p>
           </div>
 
-          <div className="w-full md:w-1/2  rounded-md  ">
-            123
+          <div className="md:w-1/2 innerB md:mt-16 ">
+            <img src={meeting} alt="" />
             <div className=" bg-white m-8 right-0 rounded-md shadow-xl ">
               <div className="p-4 text-4xl">{t("joinUs")}</div>
               {loginMode && <Login switchHandler={switchHandler} />}
@@ -68,15 +84,73 @@ const Homepage = () => {
             </div>
           </div>
         </div>
-        <div className=" lg:px-40 w-full flex flex-col md:flex-row items-center mt-16 border-b border-black">
-          <div className="w-full md:w-1/3 leading-10 text-5xl m-8 md:text-4xl lg:text-6xl   ">
-            Team up without the chaos
+        {/*  */}
+        <div className="outer mt-28">
+          <div className="innerT">
+            <img src={miro} alt="" className="topImg" />
+            <p className="topP1"> Team up with no chaos</p>
+            <p className="topP2">
+              Differentiate every users with different colors.
+            </p>
           </div>
 
-          <div className="w-full md:w-1/2  rounded-md ">
-            <img src={hp1} alt="" />
+          <div className="innerB">
+            <img src={curs} alt="" className="bottomImg" />
           </div>
         </div>
+        {/*  */}
+        <div className="outer mt-28">
+          <div className="innerT">
+            <img src={mobile} alt="" className="topImg" />
+            <p className="topP1"> Always up to date</p>
+            <p className="topP2">
+              Support mobile devices so you can update the content anytime
+              anywhere.
+            </p>
+          </div>
+
+          <div className="innerB">
+            <img src={res} alt="" className="bottomImg" />
+          </div>
+        </div>
+        {/*  */}
+        <div className="outer mt-28 ">
+          <div className="innerT">
+            <img src={secure} alt="" className="topImg" />
+            <p className="topP1"> Protect your privacy</p>
+            <p className="topP2">
+              Only you can grant or remove ones access of your documents.
+            </p>
+          </div>
+
+          <div className="innerB">
+            <img src={privacy} alt="" className="bottomImg" />
+          </div>
+        </div>
+        {/*  */}
+        <div className="outer mt-28">
+          <div className="innerT">
+            <img src={exportImg} alt="" className="topImg" />
+            <p className="topP1"> Export as PDF</p>
+            <p className="topP2">
+              Co-edit support export your documents as PDF files.
+            </p>
+          </div>
+
+          <div className="innerB">
+            <img src={exportPDF} alt="" className="bottomImg" />
+          </div>
+        </div>
+        {/*  */}
+        <footer className=" mt-20 w-full border-t border-primary ">
+          <div className="px-4 md:px-40 py-4 flex justify-between items-center">
+            <p className="">©2022 jennieHuang</p>
+            <div className="flex flex-row">
+              <img className="w-8 cursor-pointer" src={github} alt="" />
+              <img className="w-8 ml-4 cursor-pointer" src={linkedin} alt="" />
+            </div>
+          </div>
+        </footer>
       </>
     </div>
   );

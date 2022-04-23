@@ -10,9 +10,7 @@
   "author": "jennie Huang",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^2.0.15",
-    "swagger-jsdoc": "^6.2.1",
-    "swagger-ui-express": "^4.3.0"
+    "nodemon": "^2.0.15"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

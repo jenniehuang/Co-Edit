@@ -13,9 +13,12 @@ module.exports = {
         "1000px": "1000px",
         "8.5in": "8.5in",
         "200px": "200px",
+        "60vw": "60vw",
       },
       height: {
         "30vh": "30vh",
+        "10vh": "10vh",
+        "80vh": "80vh",
         "11in": "11in",
       },
       minHeight: {
@@ -33,6 +36,7 @@ module.exports = {
       },
       screens: {
         tablet: "900px",
+        print: { raw: "print" },
       },
       borderStyle: ["hover"],
     },
