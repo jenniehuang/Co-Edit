@@ -69,10 +69,7 @@ const Homepage = () => {
         <div className=" outer mt-32  md:mt-0">
           <div className="md:w-1/2 innerT ">
             <p className="topP1 md:text-6xl "> {t("welcomeSlogan")}</p>
-            <p className="topP2 ">
-              Co-edit allows you to co-editing the same document with others
-              online in real-time.
-            </p>
+            <p className="topP2 ">{t("slogan2")}</p>
           </div>
 
           <div className="md:w-1/2 innerB md:mt-16 ">
@@ -88,10 +85,8 @@ const Homepage = () => {
         <div className="outer mt-28">
           <div className="innerT">
             <img src={miro} alt="" className="topImg" />
-            <p className="topP1"> Team up with no chaos</p>
-            <p className="topP2">
-              Differentiate every users with different colors.
-            </p>
+            <p className="topP1">{t("teamUp1")} </p>
+            <p className="topP2">{t("teamUp2")}</p>
           </div>
 
           <div className="innerB">
@@ -102,11 +97,8 @@ const Homepage = () => {
         <div className="outer mt-28">
           <div className="innerT">
             <img src={mobile} alt="" className="topImg" />
-            <p className="topP1"> Always up to date</p>
-            <p className="topP2">
-              Support mobile devices so you can update the content anytime
-              anywhere.
-            </p>
+            <p className="topP1"> {t("update1")}</p>
+            <p className="topP2">{t("update2")}</p>
           </div>
 
           <div className="innerB">
@@ -117,10 +109,8 @@ const Homepage = () => {
         <div className="outer mt-28 ">
           <div className="innerT">
             <img src={secure} alt="" className="topImg" />
-            <p className="topP1"> Protect your privacy</p>
-            <p className="topP2">
-              Only you can grant or remove ones access of your documents.
-            </p>
+            <p className="topP1"> {t("privacy1")}</p>
+            <p className="topP2">{t("privacy2")}</p>
           </div>
 
           <div className="innerB">
@@ -131,10 +121,8 @@ const Homepage = () => {
         <div className="outer mt-28">
           <div className="innerT">
             <img src={exportImg} alt="" className="topImg" />
-            <p className="topP1"> Export as PDF</p>
-            <p className="topP2">
-              Co-edit support export your documents as PDF files.
-            </p>
+            <p className="topP1">{t("pdf1")} </p>
+            <p className="topP2">{t("pdf2")}</p>
           </div>
 
           <div className="innerB">
