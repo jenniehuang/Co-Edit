@@ -85,7 +85,7 @@ const Signup = ({ switchHandler }) => {
           value={password}
           onChange={onChange}
         />
-        <button className="w-full h-10 bg-gray-500 rounded-lg">
+        <button className="w-full h-10 bg-white border border-black rounded-lg">
           {t("signUp")}
         </button>
         <div className="text-xl mb-3 cursor-pointer" onClick={switchHandler}>

@@ -67,13 +67,13 @@ const Login = ({ switchHandler }) => {
           onChange={onChange}
         />
         <button
-          className="w-full h-10 bg-gray-500 rounded-lg"
+          className="w-full h-10 bg-white border border-black rounded-lg"
           onClick={loginHandler}
         >
           {t("login")}
         </button>
         <a
-          className="flex flex-row item-center justify-center w-full h-10 bg-black text-white rounded-lg"
+          className="flex flex-row item-center justify-center w-full h-10 bg-white text-black border border-black rounded-lg"
           href={`${process.env.REACT_APP_API_URL_AUTH}/google`}
         >
           <div className="flex flex-row justify-center items-center">
