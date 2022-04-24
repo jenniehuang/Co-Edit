@@ -14,6 +14,7 @@ module.exports = {
         "8.5in": "8.5in",
         "200px": "200px",
         "60vw": "60vw",
+        "500px": "500px",
       },
       height: {
         "30vh": "30vh",

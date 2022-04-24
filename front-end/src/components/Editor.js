@@ -92,7 +92,6 @@ const Editor = () => {
 
   useEffect(() => {
     if (!chosenEmoji) return;
-    console.log(quill.root.innerHTML);
 
     const emoji = chosenEmoji.emoji;
     const range = quill.getSelection();
@@ -148,7 +147,6 @@ const Editor = () => {
 
     socket.on("send-title", (title) => {
       setDocTitle(title);
-      console.log(title);
     });
   }, [socket, quill]);
 
