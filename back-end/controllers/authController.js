@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-
+const { DateTime } = require("luxon");
+const fetch = require("node-fetch");
 const User = require("../models/user-model");
 
 const signupValidation = require("../config/joi").signupValidation;
@@ -15,11 +16,24 @@ const signupLocal = async (req, res) => {
   const existEmail = await User.findOne({ email: req.body.email });
   if (existEmail)
     return res.status(400).send("This email has already been registered!");
-
+  const auth = "563492ad6f91700001000001c889c828ca8441f5a53ac461e4dbfa16";
+  const url = "https://api.pexels.com/v1/search?query=landscape&per_page=30";
+  let response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      Authorization: auth,
+    },
+  });
+  let data = await response.json();
+  let index = Math.floor(Math.random() * 30);
+  const fetchedBg = data.photos[index].src.large2x;
   const newUser = new User({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
+    date: DateTime.utc(),
+    background: fetchedBg,
   });
 
   try {
@@ -48,6 +62,7 @@ const loginLocal = async (req, res) => {
           name: user.name,
           email: user.email,
           image: user.thumbnail,
+          background: user.background,
           id: user.id,
         });
       } else {
@@ -63,7 +78,7 @@ const googleCallback = (req, res) => {
   const tokenObj = { _id: user.id, email: user.email };
   const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
   res.redirect(
-    `${process.env.SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}&image=${user.thumbnail}&id=${user.id}`
+    `${process.env.SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}&image=${user.thumbnail}&id=${user.id}&bg=${user.background}`
   );
 };
 

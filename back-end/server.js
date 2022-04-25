@@ -71,6 +71,7 @@ io.on("connection", (socket) => {
       docId: documentId,
       username: foundUser.name,
       userEmail: foundUser.email,
+      userId: foundUser._id,
       image: foundUser.thumbnail,
     };
     allUsers.push(user);

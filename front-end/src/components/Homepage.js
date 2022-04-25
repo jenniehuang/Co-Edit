@@ -34,6 +34,7 @@ const Homepage = () => {
     const email = searchParams.get("email");
     const image = searchParams.get("image");
     const id = searchParams.get("id");
+    const background = searchParams.get("bg");
     if (token && name && email && image) {
       const obj = {
         token: token,
@@ -41,6 +42,7 @@ const Homepage = () => {
         email,
         image,
         id,
+        background,
       };
       localStorage.setItem("user", JSON.stringify(obj));
       setIsLoading(false);

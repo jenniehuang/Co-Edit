@@ -24,9 +24,11 @@ const userSchema = new mongoose.Schema({
     default:
       "https://cdn4.iconfinder.com/data/icons/music-ui-solid-24px/24/user_account_profile-2-512.png",
   },
+  background: {
+    type: String,
+  },
   date: {
     type: Date,
-    default: Date.now,
   },
   subscribe: {
     type: [String],
@@ -44,6 +46,14 @@ const userSchema = new mongoose.Schema({
   pined: {
     type: [String],
     default: [],
+  },
+  link: {
+    type: String,
+    default: "",
+  },
+  about: {
+    type: String,
+    default: "",
   },
 });
 
