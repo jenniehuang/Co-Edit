@@ -56,13 +56,20 @@ const UserCard = ({ user, setUser }) => {
         <div className="absolute top-[calc(30vh_-_180px)] left-32 text-4xl">
           {userData.name}
         </div>
-        <a
-          href={userData.link}
-          target="_blank"
-          className=" text-blue-500 underline text-xl absolute top-[calc(30vh_-_130px)] left-8"
-        >
-          {userData.about}
-        </a>
+        {userData.link && (
+          <a
+            href={userData.link}
+            target="_blank"
+            className=" text-blue-500 underline text-xl absolute top-[calc(30vh_-_130px)] left-8"
+          >
+            {userData.about}
+          </a>
+        )}
+        {!userData.link && (
+          <div className=" text-xl absolute top-[calc(30vh_-_130px)] left-8">
+            {userData.about}
+          </div>
+        )}
       </div>
     </>,
     document.getElementById("portal2")

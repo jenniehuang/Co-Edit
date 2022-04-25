@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .item {
-  @apply w-full border  p-1 hover:bg-black hover:bg-opacity-20 cursor-pointer hover:font-semibold print:hidden;
+  @apply w-11/12 border mt-2 p-2 hover:bg-black hover:bg-opacity-20 cursor-pointer hover:font-semibold print:hidden rounded-md;
 }
 
 .ql-toolbar {

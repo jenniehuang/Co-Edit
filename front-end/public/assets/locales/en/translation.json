@@ -41,5 +41,16 @@
   "lostCnx": "sorry you lost your connection.",
   "recentlyChanged": "Recently changed",
   "recentlyOpened": "Recently opened",
-  "docDelete": "Sorry, this document just been deleted."
+  "docDelete": "Sorry, this document just been deleted.",
+  "profile": "Profile",
+  "profileDes": "This information will be displayed publicly so be careful what you share.",
+  "link": "Link",
+  "about": "About",
+  "aboutDes": "Brief description for your profile. URLs are hyperlinked.",
+  "photo": "Photo",
+  "coverPhoto": "Cover photo",
+  "uploadAFile": "Upload a file",
+  "uploadDes": "or drag and drop",
+  "uploadDes2": "PNG, JPG, GIF up to 10MB",
+  "save": "Save"
 }

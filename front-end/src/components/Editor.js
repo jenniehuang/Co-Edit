@@ -446,18 +446,18 @@ const Editor = () => {
             >
               😎
             </div>
-            {isSaving && (
-              <div className=" flex flex-col justify-center items-center ml-4">
-                <img src={sync} alt="" className="  w-6" />
-                <span className=" text-sm">{saveText}</span>
-              </div>
-            )}
             <img
               onClick={exportPDF}
               src={pdf}
               alt=""
               className=" cursor-pointer w-8 ml-8"
             />
+            {isSaving && (
+              <div className=" flex flex-col justify-center items-center ml-4">
+                <img src={sync} alt="" className="  w-6" />
+                <span className=" text-sm">{saveText}</span>
+              </div>
+            )}
           </div>
           {user && hostEmail === user.email && (
             <div className="flex flex-row items-center justify-between">

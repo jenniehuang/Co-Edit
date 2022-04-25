@@ -91,12 +91,9 @@ const Dashboard = () => {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <h3 className=" text-3xl font-medium leading-6 text-gray-900">
-                Profile
+                {t("profile")}
               </h3>
-              <p className="mt-1 text-sm text-gray-600">
-                This information will be displayed publicly so be careful what
-                you share.
-              </p>
+              <p className="mt-1 text-sm text-gray-600">{t("profileDes")}</p>
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
@@ -106,12 +103,12 @@ const Dashboard = () => {
                   <div className="grid grid-cols-3 gap-6">
                     <div className="col-span-3 sm:col-span-2">
                       <label className="block text-sm font-medium text-gray-700">
-                        Link
+                        {t("link")}
                       </label>
                       <div className="mt-1 flex rounded-md shadow-sm">
                         <input
                           type="text"
-                          className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full h-8 rounded-none rounded-r-md sm:text-sm border border-gray-300"
+                          className="focus:ring-primary focus:border-primary flex-1 block w-full h-8 rounded-none rounded-r-md sm:text-sm border border-gray-300"
                           onChange={(e) => {
                             setLink(e.target.value);
                           }}
@@ -123,14 +120,14 @@ const Dashboard = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      About
+                      {t("about")}
                     </label>
                     <div className="mt-1">
                       <textarea
                         id="about"
                         name="about"
                         rows="3"
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-primary mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                         onChange={(e) => {
                           setAbout(e.target.value);
                         }}
@@ -138,17 +135,21 @@ const Dashboard = () => {
                       ></textarea>
                     </div>
                     <p className="mt-2 text-sm text-gray-500">
-                      Brief description for your profile. URLs are hyperlinked.
+                      {t("aboutDes")}
                     </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Photo
+                      {t("photo")}
                     </label>
                     <div className="mt-1 flex items-center">
                       <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                        <img src={currentThumbnail} alt="" />
+                        <img
+                          className="w-12 h-12"
+                          src={currentThumbnail}
+                          alt=""
+                        />
                       </span>
                       <button
                         type="button"
@@ -167,7 +168,7 @@ const Dashboard = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Cover photo
+                      {t("coverPhoto")}
                     </label>
                     <div
                       style={{
@@ -194,7 +195,7 @@ const Dashboard = () => {
                         </svg>
                         <div className="flex text-sm text-gray-600">
                           <label className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                            <span>Upload a file</span>
+                            <span>{t("uploadAFile")}</span>
                             <input
                               id="file-upload"
                               name="file-upload"
@@ -203,10 +204,10 @@ const Dashboard = () => {
                               onChange={backgroundHandler}
                             />
                           </label>
-                          <p className="pl-1">or drag and drop</p>
+                          <p className="pl-1">{t("uploadDes")}</p>
                         </div>
                         <p className="text-xs text-gray-500">
-                          PNG, JPG, GIF up to 10MB
+                          {t("uploadDes2")}
                         </p>
                       </div>
                     </div>
@@ -214,10 +215,10 @@ const Dashboard = () => {
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     onClick={uploadUserData}
                   >
-                    Save
+                    {t("save")}
                   </button>
                 </div>
               </div>

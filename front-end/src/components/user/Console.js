@@ -20,12 +20,12 @@ const Console = () => {
   return (
     <div className="flex flex-row w-full h-screen overflow-x-hidden">
       {isMenuOpen && (
-        <div className="fixed w-60 h-screen bg-primary top-0 z-50 origin-left transition-all ease-out duration-700">
+        <div className="fixed w-60 h-screen bg-primary top-0 z-50 origin-left transition-all ease-out duration-700 flex flex-col items-center">
           <div
             onClick={() => {
               navigate("/");
             }}
-            className=" relative flex items-center item"
+            className=" relative flex  item"
           >
             <img
               onClick={(e) => {
@@ -36,8 +36,15 @@ const Console = () => {
               alt=""
               className="absolute w-6 right-3 hover:bg-primary hover:bg-opacity-60 rounded-md"
             />
-            <img src={user.image} alt="" className="w-6 rounded border" />
-            <div className=" text-sm ml-4">{user.name}</div>
+            <img
+              src={user.image}
+              alt=""
+              className="w-12 h-12 rounded-full border"
+            />
+            <div className="ml-4">
+              <div className=" text-xl">{user.name}</div>
+              <div className=" text-xs text-gray-500">{user.email}</div>
+            </div>
           </div>
           <div
             onClick={() => {
@@ -45,10 +52,10 @@ const Console = () => {
             }}
             className="item"
           >
-            ✏{t("dashboard")}
+            ✏ {t("dashboard")}
           </div>
-          <a href="/newdoc" target="_blank">
-            <div className="item">🗒{t("create")}</div>
+          <a className="item" href="/newdoc" target="_blank">
+            <div className="">🗒 {t("create")}</div>
           </a>
           <div
             onClick={() => {
@@ -56,7 +63,7 @@ const Console = () => {
             }}
             className="item"
           >
-            📒{t("mine")}
+            📒 {t("mine")}
           </div>
           <div
             onClick={() => {
@@ -64,7 +71,7 @@ const Console = () => {
             }}
             className="item"
           >
-            📚{t("share")}
+            📚 {t("share")}
           </div>
         </div>
       )}
