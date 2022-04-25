@@ -45,10 +45,10 @@ const UserCard = ({ user, setUser }) => {
           style={{ backgroundImage: `url(${userData.background})` }}
           className=" relative w-full h-1/3 bg-cover bg-center overflow-hidden rounded-t-xl"
         ></div>
-        <div className="flex flex-col justify-center items-center w-24 absolute left-6 top-[calc(30vh_-_230px)]">
+        <div className="flex flex-col justify-center items-center w-24 absolute left-6 top-[calc(30vh_-_240px)]">
           <img
             referrerPolicy="no-referrer"
-            className=" rounded-full border-2 border-white"
+            className=" rounded-full w-24 h-24 border-2 border-white"
             src={userData.thumbnail}
             alt=""
           />

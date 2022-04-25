@@ -20,7 +20,11 @@ const OnlineList = ({ isOnlineList, docUsers, hostEmail, currentUser }) => {
               key={v.userEmail}
               className=" cursor-pointer w-11/12 flex flex-row  items-center p-2 hover:font-bold hover:bg-slate-300 mx-2 rounded-2xl"
             >
-              <img className="w-10 rounded-full border" src={v.image} alt="" />
+              <img
+                className="w-10 h-10 rounded-full border"
+                src={v.image}
+                alt=""
+              />
               <div
                 className={`  text-lg ml-6 ${
                   v.userEmail === currentUser ? "text-sky-700" : "text-black"
