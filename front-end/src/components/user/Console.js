@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Nav from "../Nav";
-import Mydocs from "./Mydocs";
+import Docs from "./Docs";
 import UserPage from "./UserPage";
 
 import { useTranslation } from "react-i18next";
@@ -59,7 +59,7 @@ const Console = () => {
           </a>
           <div
             onClick={() => {
-              navigate("/mydocs");
+              navigate("/Docs");
             }}
             className="item"
           >
@@ -93,8 +93,8 @@ const Console = () => {
           <Routes>
             <Route path="/" element={<UserPage isMenuOpen={isMenuOpen} />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="mydocs" element={<Mydocs />} />
-            <Route path="shared" element={<Mydocs />} />
+            <Route path="Docs" element={<Docs />} />
+            <Route path="shared" element={<Docs />} />
           </Routes>
         </div>
       </div>

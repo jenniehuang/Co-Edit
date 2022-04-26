@@ -6,7 +6,7 @@ import DocServices from "../../services/doc-services";
 import Loading from "../Loading";
 import { useTranslation } from "react-i18next";
 
-const Mydocs = ({ section }) => {
+const Docs = ({ section }) => {
   const { t } = useTranslation();
 
   let [docArr, setDocArr] = useState([]);
@@ -25,7 +25,7 @@ const Mydocs = ({ section }) => {
     const myDoc = async () => {
       try {
         let data;
-        if (path === "/mydocs") {
+        if (path === "/Docs") {
           data = (await DocServices.mydoc()).data;
         } else if (path === "/shared") {
           data = (await DocServices.shared()).data;
@@ -92,4 +92,4 @@ const Mydocs = ({ section }) => {
   );
 };
 
-export default Mydocs;
+export default Docs;

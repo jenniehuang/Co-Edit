@@ -72,7 +72,7 @@ const UserCard = ({ user, setUser }) => {
         )}
       </div>
     </>,
-    document.getElementById("portal2")
+    document.getElementById("portal")
   );
 };
 

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";
-import Mydocs from "./Mydocs";
+import Docs from "./Docs";
 
 const UserPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -29,11 +29,11 @@ const UserPage = () => {
         <div className="ml-8 text-2xl text-gray-600">
           {t("recentlyChanged")}
         </div>
-        <Mydocs section={"recentlyChanged"} />
+        <Docs section={"recentlyChanged"} />
       </div>
       <div className=" mt-8 ">
         <div className="ml-8 text-2xl text-gray-600">{t("recentlyOpened")}</div>
-        <Mydocs section={"recentlyOpened"} />
+        <Docs section={"recentlyOpened"} />
       </div>
     </div>
   );
