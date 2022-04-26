@@ -101,7 +101,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("save-title", async (title) => {
-      console.log("savetitle");
       await Document.findByIdAndUpdate(documentId, { title });
       socket.broadcast.to(documentId).emit("send-title", title);
     });
@@ -123,5 +122,4 @@ io.on("connection", (socket) => {
       io.to(documentId).emit("all-users", NewDocUsers);
     });
   });
-  // console.log("connected");
 });

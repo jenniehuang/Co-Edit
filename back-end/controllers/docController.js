@@ -9,13 +9,15 @@ const recentlyOpened = async (req, res) => {
   try {
     const data = await Promise.all(
       recentlyOpened.map(async (v) => {
-        let doc = await Document.findById(v._id);
+        let doc = await Document.findById(v._id).populate("host", [
+          "name",
+          "email",
+        ]);
         if (!doc) return;
         let subData = {
           id: doc._id,
           title: doc.title,
-          hostName: doc.hostName,
-          time: doc.time,
+          host: doc.host,
           background: doc.background,
           lastOpened: v.time,
         };
@@ -33,13 +35,16 @@ const recentlyOpened = async (req, res) => {
 };
 
 const myDoc = async (req, res) => {
-  const docs = await Document.find({ hostEmail: req.user.email });
+  const docs = await Document.find({ host: req.user._id }).populate("host", [
+    "name",
+    "email",
+  ]);
   let data = [];
   docs.forEach((v) => {
     subData = {};
     subData.id = v._id;
     subData.title = v.title;
-    subData.hostName = v.hostName;
+    subData.host = v.host;
     subData.background = v.background;
     subData.lastModified = v.lastModified;
     data.push(subData);
@@ -54,12 +59,14 @@ const shared = async (req, res) => {
   try {
     const data = await Promise.all(
       subscribe.map(async (v) => {
-        let doc = await Document.findById(v);
+        let doc = await Document.findById(v).populate("host", [
+          "name",
+          "email",
+        ]);
         let subData = {
           id: doc._id,
           title: doc.title,
-          hostName: doc.hostName,
-          time: doc.time,
+          host: doc.host,
           background: doc.background,
           lastModified: doc.lastModified,
         };
@@ -82,13 +89,10 @@ const docUserList = async (req, res) => {
 
 const getOneOrCreate = async (req, res) => {
   let { _id } = req.params;
-  const doc = await Document.findById(_id);
+  const doc = await Document.findById(_id).populate("host", ["name", "email"]);
 
   if (doc) {
-    if (
-      !(doc.hostEmail === req.user.email) &&
-      !req.user.subscribe.includes(_id)
-    )
+    if (!doc.host.equals(req.user._id) && !req.user.subscribe.includes(_id))
       return res
         .status(403)
         .send("Sorry! You are not authorized to access this document.");
@@ -97,8 +101,7 @@ const getOneOrCreate = async (req, res) => {
     const newDoc = await Document.create({
       _id,
       data: "",
-      hostEmail: req.user.email,
-      hostName: req.user.name,
+      host: req.user._id,
       lastModified: DateTime.utc(),
     });
     res.status(200).send(newDoc);
@@ -107,18 +110,18 @@ const getOneOrCreate = async (req, res) => {
 
 const grantAccess = async (req, res) => {
   let { email, docId } = req.body;
-  let hostEmail = req.user.email;
+  let host = req.user._id;
 
   try {
     const doc = await Document.findById(docId);
     if (!doc) return res.status(404).send("document not found!");
-    if (doc.hostEmail !== hostEmail)
+    if (!doc.host.equals(host))
       return res.status(403).send("Unauthorized Access.");
 
     const user = await User.findOne({ email });
     if (!user) return res.status(400).send("User not found!");
 
-    if (user.subscribe.includes(docId) | (email === hostEmail)) {
+    if (user.subscribe.includes(docId) | (email === req.user.email)) {
       res.status(400).send("This user already joined this document!");
     } else {
       user.subscribe.push(docId);
@@ -132,12 +135,12 @@ const grantAccess = async (req, res) => {
 
 const removeUser = async (req, res) => {
   let { email, docId } = req.body;
-  let hostEmail = req.user.email;
+  let host = req.user._id;
 
   try {
     const doc = await Document.findById(docId);
     if (!doc) return res.status(404).send("document not found!");
-    if (doc.hostEmail !== hostEmail)
+    if (!doc.host.equals(host))
       return res.status(403).send("Unauthorized Access.");
 
     const user = await User.findOne({ email });
@@ -159,10 +162,10 @@ const removeUser = async (req, res) => {
 
 const deleteDoc = async (req, res) => {
   let { _id } = req.params;
-  let hostEmail = req.user.email;
+  let host = req.user._id;
   const doc = await Document.findById(_id);
   if (!doc) return res.status(404).send("document not found!");
-  if (doc.hostEmail !== hostEmail)
+  if (!doc.host.equals(host))
     return res.status(403).send("Unauthorized Access.");
 
   try {

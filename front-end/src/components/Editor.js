@@ -162,7 +162,7 @@ const Editor = () => {
         let docInfo = response.data;
         setIsAuthorized(true);
         setDocTitle(docInfo.title);
-        setHostEmail(docInfo.hostEmail);
+        setHostEmail(docInfo.host.email);
         setBackground(docInfo.background);
         quill.setContents(docInfo.data);
         quill.enable();

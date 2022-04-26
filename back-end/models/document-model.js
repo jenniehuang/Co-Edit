@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { DateTime } = require("luxon");
 const User = require("./user-model");
 const documentSchema = new mongoose.Schema({
   _id: {
@@ -16,14 +15,9 @@ const documentSchema = new mongoose.Schema({
     type: Object,
   },
 
-  hostEmail: {
-    type: String,
-    required: true,
-  },
-
-  hostName: {
-    type: String,
-    required: true,
+  host: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 
   background: {

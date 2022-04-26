@@ -76,7 +76,7 @@ const Docs = ({ section }) => {
             key={v.id}
             id={v.id}
             title={v.title}
-            host={v.hostName}
+            host={v.host.name}
             image={v.background}
             lastModified={v.lastModified}
             lastOpened={v.lastOpened}
