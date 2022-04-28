@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
 import arrow from "../images/arrow.png";
-import { useState } from "react";
+import logo from "../images/logo.svg";
 
 const Nav = ({ setIsMenuOpen, isMenuOpen, CN }) => {
   const { t } = useTranslation();
@@ -39,7 +39,12 @@ const Nav = ({ setIsMenuOpen, isMenuOpen, CN }) => {
           isMenuOpen ? "w-full md:w-[calc(100vw_-_240px)]" : "w-full"
         }`}
       >
-        {!user && <div className=" text-4xl m-2 w-48">Co-Edit</div>}
+        {!user && (
+          <div className="flex flex-row items-center text-4xl m-2 w-1/2">
+            <img src={logo} alt="" className="h-12 mr-4" />
+            Co-Edit
+          </div>
+        )}
         {user && (
           <div className="flex flex-row items-center ml-4">
             <img

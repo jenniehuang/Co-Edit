@@ -24,9 +24,6 @@ const Homepage = () => {
   const [loginMode, setLoginMode] = useState(true);
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-  // const [isBgLoaded, setIsBgLoaded] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = searchParams.get("token");
