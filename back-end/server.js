@@ -51,14 +51,14 @@ io.on("connection", (socket) => {
     let exists = false;
     foundUser.recentlyOpened.map((v, i) => {
       if (v._id === documentId) {
-        foundUser.recentlyOpened[i].time = DateTime.utc();
+        foundUser.recentlyOpened[i].lastOpened = DateTime.utc();
         exists = true;
       }
     });
     if (!exists) {
       let info = {
         _id: documentId,
-        time: DateTime.utc(),
+        lastOpened: DateTime.utc(),
       };
       foundUser.recentlyOpened.push(info);
     }

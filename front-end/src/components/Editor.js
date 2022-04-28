@@ -371,25 +371,28 @@ const Editor = () => {
           </div>
         </>
       )}
-      <Delete
-        socket={socket}
-        isDelete={isDelete}
-        docTitle={docTitle}
-        documentId={documentId}
-        onClose={() => {
-          setIsDelete(false);
-        }}
-      />
-      {user && (
-        <UserList
-          socket={socket}
-          documentId={documentId}
-          isOpenList={isOpenList}
-          onClose={() => {
-            setIsOpenList(!isOpenList);
-          }}
-        />
+      {user && user.email === hostEmail && (
+        <>
+          <Delete
+            socket={socket}
+            isDelete={isDelete}
+            docTitle={docTitle}
+            documentId={documentId}
+            onClose={() => {
+              setIsDelete(false);
+            }}
+          />
+          <UserList
+            socket={socket}
+            documentId={documentId}
+            isOpenList={isOpenList}
+            onClose={() => {
+              setIsOpenList(!isOpenList);
+            }}
+          />
+        </>
       )}
+
       <Emoji
         CN={"fixed left-0 top-2/4 "}
         isEmoji={isEmoji}

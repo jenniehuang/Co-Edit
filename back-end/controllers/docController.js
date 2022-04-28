@@ -3,30 +3,31 @@ const User = require("../models/user-model");
 const { DateTime } = require("luxon");
 
 const recentlyOpened = async (req, res) => {
-  const user = await User.findOne({ email: req.user.email });
-  const recentlyOpened = user.recentlyOpened;
-
   try {
-    const data = await Promise.all(
-      recentlyOpened.map(async (v) => {
-        let doc = await Document.findById(v._id).populate("host", [
-          "name",
-          "email",
-        ]);
-        if (!doc) return;
-        let subData = {
-          id: doc._id,
-          title: doc.title,
-          host: doc.host,
-          background: doc.background,
-          lastOpened: v.time,
-        };
-        return subData;
-      })
-    );
-    if (!data) {
-      data = [];
-    }
+    const recentlyOpened = await User.findOne({
+      email: req.user.email,
+    })
+      .select("recentlyOpened -_id")
+      .populate({
+        path: "recentlyOpened._id",
+        model: "Document",
+        select: "_id title host background",
+        populate: {
+          path: "host",
+          model: "User",
+          select: "name email",
+        },
+      });
+    let data = recentlyOpened.recentlyOpened.map((v) => {
+      return {
+        _id: v._id._id,
+        title: v._id.title,
+        host: v._id.host,
+        background: v._id.background,
+        lastOpened: v.lastOpened,
+      };
+    });
+
     res.send(data);
   } catch (e) {
     console.log(e);
@@ -42,7 +43,7 @@ const myDoc = async (req, res) => {
   let data = [];
   docs.forEach((v) => {
     subData = {};
-    subData.id = v._id;
+    subData._id = v._id;
     subData.title = v.title;
     subData.host = v.host;
     subData.background = v.background;
@@ -53,28 +54,22 @@ const myDoc = async (req, res) => {
 };
 
 const shared = async (req, res) => {
-  const user = await User.findOne({ email: req.user.email });
-  const subscribe = user.subscribe;
-
   try {
-    const data = await Promise.all(
-      subscribe.map(async (v) => {
-        let doc = await Document.findById(v).populate("host", [
-          "name",
-          "email",
-        ]);
-        let subData = {
-          id: doc._id,
-          title: doc.title,
-          host: doc.host,
-          background: doc.background,
-          lastModified: doc.lastModified,
-        };
-        return subData;
-      })
-    );
-
-    res.send(data);
+    const subscribe = await User.findOne({
+      email: req.user.email,
+    })
+      .select("subscribe -_id")
+      .populate({
+        path: "subscribe",
+        model: "Document",
+        select: "_id title host background lastModified",
+        populate: {
+          path: "host",
+          model: "User",
+          select: "name email",
+        },
+      });
+    res.send(subscribe.subscribe);
   } catch (e) {
     console.log(e);
     res.status(500).send("Sorry, something went wrong.");
@@ -83,8 +78,17 @@ const shared = async (req, res) => {
 
 const docUserList = async (req, res) => {
   let { _id } = req.params;
-  const users = await User.find({ subscribe: _id }).select("name email -_id");
-  res.status(200).send(users);
+  try {
+    const doc = await Document.findById(_id);
+    if (!doc.host.equals(req.user._id)) {
+      return res.status(403).send("Unauthorized");
+    }
+    const users = await User.find({ subscribe: _id }).select("name email -_id");
+    res.status(200).send(users);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Sorry, something went wrong.");
+  }
 };
 
 const getOneOrCreate = async (req, res) => {
@@ -98,6 +102,7 @@ const getOneOrCreate = async (req, res) => {
         .send("Sorry! You are not authorized to access this document.");
     return res.status(200).send(doc);
   } else {
+    console.log("new");
     const newDoc = await Document.create({
       _id,
       data: "",
