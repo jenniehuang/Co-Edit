@@ -40,7 +40,7 @@ const signupLocal = async (req, res) => {
     const savedUser = await newUser.save();
     res.status(200).send("Sign up successful, you can login now!");
   } catch (err) {
-    res.status(400).send("User not saved.");
+    res.status(500).send("User not saved.");
   }
 };
 
@@ -57,7 +57,7 @@ const loginLocal = async (req, res) => {
       if (isMatch) {
         const tokenObj = { _id: user.id, email: user.email };
         const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
-        res.send({
+        res.status(200).send({
           token: "JWT " + token,
           name: user.name,
           email: user.email,

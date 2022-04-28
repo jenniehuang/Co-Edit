@@ -73,8 +73,8 @@ const Docs = ({ section }) => {
       {docArr.length !== 0 &&
         docArr.map((v) => (
           <DocCard
-            key={v.id}
-            id={v.id}
+            key={v._id}
+            id={v._id}
             title={v.title}
             host={v.host.name}
             image={v.background}

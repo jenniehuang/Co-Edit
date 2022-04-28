@@ -31,14 +31,22 @@ const userSchema = new mongoose.Schema({
     type: Date,
   },
   subscribe: {
-    type: [String],
+    type: [
+      {
+        type: String,
+        ref: "Document",
+      },
+    ],
     default: [],
   },
   recentlyOpened: {
     type: [
       {
-        _id: String,
-        time: Date,
+        _id: {
+          type: String,
+          ref: "Document",
+        },
+        lastOpened: Date,
       },
     ],
     default: [],
