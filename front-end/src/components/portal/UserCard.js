@@ -40,12 +40,12 @@ const UserCard = ({ user, setUser }) => {
         style={overlay_style}
       />
 
-      <div className="w-500px fixed top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2  rounded-xl bg-white shadow-md font-serif h-30vh ">
+      <div className="w-500px fixed top-1/2 translate-x-1/2 -translate-y-1/2 right-1/2  rounded-xl bg-white shadow-md font-serif h-64 ">
         <div
           style={{ backgroundImage: `url(${userData.background})` }}
           className=" relative w-full h-1/3 bg-cover bg-center overflow-hidden rounded-t-xl"
         ></div>
-        <div className="flex flex-col justify-center items-center w-24 absolute left-6 top-[calc(30vh_-_240px)]">
+        <div className="flex flex-col justify-center items-center w-24 absolute left-6 top-10">
           <img
             referrerPolicy="no-referrer"
             className=" rounded-full w-24 h-24 border-2 border-white"
@@ -53,9 +53,7 @@ const UserCard = ({ user, setUser }) => {
             alt=""
           />
         </div>
-        <div className="absolute top-[calc(30vh_-_180px)] left-32 text-4xl">
-          {userData.name}
-        </div>
+        <div className="absolute top-20 left-32 text-4xl">{userData.name}</div>
         {userData.link && (
           <a
             href={userData.link}

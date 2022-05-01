@@ -59,7 +59,7 @@ const Nav = ({ setIsMenuOpen, isMenuOpen, CN }) => {
             />
           </div>
         )}
-        <div className={`flex flex-row justify-end w-full `}>
+        <div className={`flex flex-row justify-end  `}>
           <div className="flex flex-row">
             {languages.map(({ code, name, country_code }) => (
               <button

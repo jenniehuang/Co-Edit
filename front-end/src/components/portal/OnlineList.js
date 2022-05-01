@@ -15,7 +15,6 @@ const OnlineList = ({ isOnlineList, docUsers, hostEmail, currentUser }) => {
             <div
               onClick={() => {
                 setUser(v.userId);
-                console.log("c");
               }}
               key={v.userEmail}
               className=" cursor-pointer w-11/12 flex flex-row  items-center p-2 hover:font-bold hover:bg-slate-300 mx-2 rounded-2xl"

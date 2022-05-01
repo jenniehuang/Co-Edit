@@ -4,8 +4,6 @@ import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import Loading from "./Loading";
 import Nav from "./Nav";
-import bg from "../images/bg.jpg";
-import hp1 from "../images/hp1.png";
 import meeting from "../images/meeting.png";
 import miro from "../images/miro.png";
 import mobile from "../images/mobile.png";
@@ -130,7 +128,7 @@ const Homepage = () => {
         </div>
         {/*  */}
         <footer className=" mt-20 w-full border-t border-primary ">
-          <div className="px-4 md:px-40 py-4 flex justify-between items-center">
+          <div className="px-4 lg:px-40 py-4 flex justify-between items-center">
             <p className="">©2022 jennieHuang</p>
             <div className="flex flex-row">
               <img className="w-8 cursor-pointer" src={github} alt="" />
