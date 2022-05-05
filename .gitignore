@@ -29,6 +29,6 @@ note.txt
 note.md
 **/*.sh
 **/Dockerfile
-**/*.yaml
+docker-compose.yaml
 **/firebase
 
