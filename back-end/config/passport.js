@@ -9,9 +9,9 @@ const fetch = require("node-fetch");
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.SERVER_URI}/api/auth/google/callback`,
+      clientID: process.env._GOOGLE_CLIENT_ID,
+      clientSecret: process.env._GOOGLE_CLIENT_SECRET,
+      callbackURL: `${process.env._SERVER_URI}/api/auth/google/callback`,
       scope: ["profile", "email"],
     },
     //passport callback
@@ -53,7 +53,7 @@ passport.use(
 module.exports = (passport) => {
   let opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("JWT");
-  opts.secretOrKey = process.env.PASSPORT_SECRET;
+  opts.secretOrKey = process.env._PASSPORT_SECRET;
   passport.use(
     new JwtStrategy(opts, async function (jwt_payload, done) {
       try {

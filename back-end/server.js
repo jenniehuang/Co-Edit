@@ -10,7 +10,7 @@ app.listen(8080, () => {
 //-------------------socket.io---------------
 const io = require("socket.io")(8000, {
   cors: {
-    origin: process.env.SOCKET_ORIGIN,
+    origin: process.env._SOCKET_ORIGIN,
     method: ["GET", "POST"],
   },
 });
