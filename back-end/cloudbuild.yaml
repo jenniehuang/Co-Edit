@@ -6,7 +6,6 @@ steps:
         "build",
         "-t",
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}:latest",
-        "./back-end/",
         "--build-arg",
         "_DB_CONNECT=${_DB_CONNECT}",
         "--build-arg",
@@ -19,6 +18,7 @@ steps:
         "_SOCKET_ORIGIN=${_SOCKET_ORIGIN}",
         "--build-arg",
         "_SERVER_URI=${_SERVER_URI}",
+        "./back-end/",
       ]
     id: Building the container image
   # Push the container image to Container Registry
