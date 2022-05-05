@@ -6,6 +6,12 @@ steps:
   - name: node
     entrypoint: npm
     args: ["run", "test"]
+    env:
+      - "GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}"
+      - "GOOGLE_CLIENT_SECRET=${_GOOGLE_CLIENT_SECRET}"
+      - "PASSPORT_SECRET=${_PASSPORT_SECRET}"
+      - "SOCKET_ORIGIN=${_SOCKET_ORIGIN}"
+      - "SERVER_URI=${_SERVER_URI}"
     dir: "back-end"
 
   # Build the container image
