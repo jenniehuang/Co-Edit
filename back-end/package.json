@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "devStart": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose --detectOpenHandles"
   },
   "author": "jennie Huang",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "jest": "^28.0.3",
+    "nodemon": "^2.0.15",
+    "sinon": "^13.0.2",
+    "supertest": "^6.2.3"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -26,6 +29,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "sinon-mongoose": "^2.3.0",
     "socket.io": "^4.4.1"
   }
 }

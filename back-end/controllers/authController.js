@@ -49,11 +49,11 @@ const loginLocal = async (req, res) => {
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  User.findOne({ email: req.body.email }, (err, user) => {
-    if (err) return res.status(400).send(err);
+  try {
+    const user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(404).send("User not found.");
-    user.comparePassword(req.body.password, function (err, isMatch) {
-      if (err) return res.status(400).send(err);
+    try {
+      const isMatch = await user.comparePassword(req.body.password);
       if (isMatch) {
         const tokenObj = { _id: user.id, email: user.email };
         const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
@@ -66,11 +66,15 @@ const loginLocal = async (req, res) => {
           id: user.id,
         });
       } else {
-        console.log(err);
         return res.status(401).send("Wrong email or password.");
       }
-    });
-  });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).send(e);
+    }
+  } catch (e) {
+    return res.status(500).send(e);
+  }
 };
 
 const googleCallback = (req, res) => {

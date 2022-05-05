@@ -14,7 +14,7 @@ const uploadUserData = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
   let { _id } = req.params;
-  const foundUser = await User.findById(_id);
+  const foundUser = await User.findOne({ _id });
   const data = {
     name: foundUser.name,
     thumbnail: foundUser.thumbnail,

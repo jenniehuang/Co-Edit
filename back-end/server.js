@@ -1,33 +1,7 @@
-const express = require("express");
-const dotenv = require("dotenv").config();
-const authRoute = require("./routes/auth-routes");
-const docRoute = require("./routes/doc-routes");
-const userRoute = require("./routes/user-routes");
+const app = require("./app");
 const Document = require("./models/document-model");
 const User = require("./models/user-model");
-const cors = require("cors");
-const connectDB = require("./config/mongodb");
-const passport = require("passport");
 const { DateTime } = require("luxon");
-require("./config/passport")(passport);
-
-const app = express();
-connectDB();
-
-// MW
-app.use(cors());
-
-//bodyparser for json
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.use("/api/auth", authRoute);
-app.use("/api/doc", passport.authenticate("jwt", { session: false }), docRoute);
-app.use(
-  "/api/user",
-  passport.authenticate("jwt", { session: false }),
-  userRoute
-);
 
 app.listen(8080, () => {
   console.log("Server is 跑 on 破 8080.");
@@ -123,3 +97,5 @@ io.on("connection", (socket) => {
     });
   });
 });
+
+module.exports = app;

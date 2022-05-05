@@ -77,12 +77,9 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-userSchema.methods.comparePassword = function (password, cb) {
+userSchema.methods.comparePassword = async function (password) {
   //------------plainText----DB----------
-  bcrypt.compare(password, this.password, (err, isMatch) => {
-    if (err) return cb(err, isMatch);
-    cb(null, isMatch);
-  });
+  return bcrypt.compare(password, this.password);
 };
 
 module.exports = mongoose.model("User", userSchema);

@@ -34,7 +34,6 @@ passport.use(
         let data = await response.json();
         let index = Math.floor(Math.random() * 30);
         const fetchedBg = data.photos[index].src.large2x;
-        console.log(fetchedBg);
         const newUser = new User({
           name: profile.displayName,
           email: profile.emails[0].value,
@@ -56,12 +55,14 @@ module.exports = (passport) => {
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("JWT");
   opts.secretOrKey = process.env.PASSPORT_SECRET;
   passport.use(
-    new JwtStrategy(opts, function (jwt_payload, done) {
-      User.findById(jwt_payload._id, (err, user) => {
-        if (err) return done(err, false);
+    new JwtStrategy(opts, async function (jwt_payload, done) {
+      try {
+        const user = await User.findById(jwt_payload._id);
         if (user) return done(null, user);
-        return done(null, false);
-      });
+      } catch (e) {
+        return done(e, false);
+      }
+      return done(null, false);
     })
   );
 };

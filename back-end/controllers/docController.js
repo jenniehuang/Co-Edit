@@ -28,7 +28,7 @@ const recentlyOpened = async (req, res) => {
       };
     });
 
-    res.send(data);
+    res.status(200).send(data);
   } catch (e) {
     console.log(e);
     res.status(500).send("Sorry, something went wrong.");
@@ -36,21 +36,15 @@ const recentlyOpened = async (req, res) => {
 };
 
 const myDoc = async (req, res) => {
-  const docs = await Document.find({ host: req.user._id }).populate("host", [
-    "name",
-    "email",
-  ]);
-  let data = [];
-  docs.forEach((v) => {
-    subData = {};
-    subData._id = v._id;
-    subData.title = v.title;
-    subData.host = v.host;
-    subData.background = v.background;
-    subData.lastModified = v.lastModified;
-    data.push(subData);
-  });
-  res.send(data);
+  try {
+    const docs = await Document.find({ host: req.user._id })
+      .select(" -data")
+      .populate("host", ["name", "email"]);
+    res.status(200).send(docs);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Sorry, something went wrong.");
+  }
 };
 
 const shared = async (req, res) => {
@@ -69,7 +63,7 @@ const shared = async (req, res) => {
           select: "name email",
         },
       });
-    res.send(subscribe.subscribe);
+    res.status(200).send(subscribe.subscribe);
   } catch (e) {
     console.log(e);
     res.status(500).send("Sorry, something went wrong.");
@@ -80,8 +74,11 @@ const docUserList = async (req, res) => {
   let { _id } = req.params;
   try {
     const doc = await Document.findById(_id);
+
     if (!doc.host.equals(req.user._id)) {
-      return res.status(403).send("Unauthorized");
+      return res
+        .status(403)
+        .send("Sorry! You are not authorized to access this.");
     }
     const users = await User.find({ subscribe: _id }).select("name email -_id");
     res.status(200).send(users);
@@ -124,13 +121,13 @@ const grantAccess = async (req, res) => {
       return res.status(403).send("Unauthorized Access.");
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).send("User not found!");
+    if (!user) return res.status(404).send("User not found!");
 
     if (user.subscribe.includes(docId) | (email === req.user.email)) {
       res.status(400).send("This user already joined this document!");
     } else {
       user.subscribe.push(docId);
-      await user.save();
+      let result = await user.save();
       res.status(200).send("Access granted!");
     }
   } catch (e) {
@@ -149,7 +146,7 @@ const removeUser = async (req, res) => {
       return res.status(403).send("Unauthorized Access.");
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).send("User not found!");
+    if (!user) return res.status(404).send("User not found!");
 
     if (!user.subscribe.includes(docId)) {
       res.status(400).send("This is not in the list.");
