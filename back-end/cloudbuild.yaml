@@ -7,6 +7,18 @@ steps:
         "-t",
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}:latest",
         "./back-end/",
+        "--build-args",
+        "_DB_CONNECT=${_DB_CONNECT}",
+        "--build-args",
+        "_GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}",
+        "--build-args",
+        "_GOOGLE_CLIENT_SECRET=${_GOOGLE_CLIENT_SECRET}",
+        "--build-args",
+        "_PASSPORT_SECRET=${_PASSPORT_SECRET}",
+        "--build-args",
+        "_SOCKET_ORIGIN=${_SOCKET_ORIGIN}",
+        "--build-args",
+        "_SERVER_URI=${_SERVER_URI}",
       ]
     id: Building the container image
   # Push the container image to Container Registry
