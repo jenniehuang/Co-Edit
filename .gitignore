@@ -31,4 +31,5 @@ note.md
 docker-compose.yaml
 **/firebase
 cicd.js
+cicd
 
