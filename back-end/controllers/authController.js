@@ -56,7 +56,7 @@ const loginLocal = async (req, res) => {
       const isMatch = await user.comparePassword(req.body.password);
       if (isMatch) {
         const tokenObj = { _id: user.id, email: user.email };
-        const token = jwt.sign(tokenObj, process.env._PASSPORT_SECRET);
+        const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
         res.status(200).send({
           token: "JWT " + token,
           name: user.name,
@@ -80,9 +80,9 @@ const loginLocal = async (req, res) => {
 const googleCallback = (req, res) => {
   const { user } = req;
   const tokenObj = { _id: user.id, email: user.email };
-  const token = jwt.sign(tokenObj, process.env._PASSPORT_SECRET);
+  const token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
   res.redirect(
-    `${process.env._SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}&image=${user.thumbnail}&id=${user.id}&bg=${user.background}`
+    `${process.env.SOCKET_ORIGIN}/?token=JWT ${token}&name=${user.name}&email=${user.email}&image=${user.thumbnail}&id=${user.id}&bg=${user.background}`
   );
 };
 

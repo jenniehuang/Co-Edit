@@ -50,7 +50,7 @@ describe("login", () => {
     expect(
       jwtSignSpy.calledWithExactly(
         { _id: user.id, email: user.email },
-        process.env._PASSPORT_SECRET
+        process.env.PASSPORT_SECRET
       )
     ).toBe(true);
   });
