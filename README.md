@@ -24,6 +24,7 @@ Test account and password:
   - [Database](#database)
   - [Cloud Services](#cloud-services)
   - [Networking](#networking)
+  - [Test](#test)
   - [Third Party Library](#third-party-library)
   - [Version Control](#version-control)
   - [Key Points](#key-points)
@@ -65,6 +66,8 @@ Test account and password:
 
 - Compute Engine
 - Container Registry
+- Cloud Build
+- Cloud Pub/Sub
 
 ### Networking
 
@@ -72,6 +75,10 @@ Test account and password:
 - Domain Name System (DNS)
 - NGINX
 - SSL (Let's Encrypt)
+
+### Test
+
+- Unit test: Jest, Sinon, Supertest
 
 ### Third Party Library
 
