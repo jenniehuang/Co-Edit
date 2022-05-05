@@ -4,7 +4,7 @@ const User = require("./models/user-model");
 const { DateTime } = require("luxon");
 
 app.listen(8080, () => {
-  console.log("Server is running on 破 8080.");
+  console.log("Server is 跑 on 破 8080.");
 });
 
 //-------------------socket.io---------------
