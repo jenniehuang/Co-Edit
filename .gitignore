@@ -30,4 +30,5 @@ note.md
 **/*.sh
 docker-compose.yaml
 **/firebase
+cicd.js
 
