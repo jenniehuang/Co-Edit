@@ -2,9 +2,11 @@ steps:
   - name: node
     entrypoint: npm
     args: ["install"]
+    dir: "back-end"
   - name: node
     entrypoint: npm
     args: ["run", "test"]
+    dir: "back-end"
 
   # Build the container image
   - name: gcr.io/cloud-builders/docker
