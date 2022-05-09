@@ -30,7 +30,9 @@ const recentlyOpened = async (req, res) => {
 
     res.status(200).send(data);
   } catch (e) {
-    console.log(e);
+    if (process.env.NODE_ENV !== "test") {
+      console.log(e);
+    }
     res.status(500).send("Sorry, something went wrong.");
   }
 };
@@ -42,7 +44,9 @@ const myDoc = async (req, res) => {
       .populate("host", ["name", "email"]);
     res.status(200).send(docs);
   } catch (e) {
-    console.log(e);
+    if (process.env.NODE_ENV !== "test") {
+      console.log(e);
+    }
     res.status(500).send("Sorry, something went wrong.");
   }
 };
@@ -65,7 +69,9 @@ const shared = async (req, res) => {
       });
     res.status(200).send(subscribe.subscribe);
   } catch (e) {
-    console.log(e);
+    if (process.env.NODE_ENV !== "test") {
+      console.log(e);
+    }
     res.status(500).send("Sorry, something went wrong.");
   }
 };
@@ -83,7 +89,9 @@ const docUserList = async (req, res) => {
     const users = await User.find({ subscribe: _id }).select("name email -_id");
     res.status(200).send(users);
   } catch (e) {
-    console.log(e);
+    if (process.env.NODE_ENV !== "test") {
+      console.log(e);
+    }
     res.status(500).send("Sorry, something went wrong.");
   }
 };
@@ -157,7 +165,9 @@ const removeUser = async (req, res) => {
       res.status(200).send("User removed!");
     }
   } catch (e) {
-    console.log(e);
+    if (process.env.NODE_ENV !== "test") {
+      console.log(e);
+    }
     res.status(500).send("Sorry, something went wrong.");
   }
 };
@@ -174,7 +184,9 @@ const deleteDoc = async (req, res) => {
     const result = await Document.deleteOne({ _id });
     res.status(200).send("Document deleted!");
   } catch (e) {
-    console.log(e);
+    if (process.env.NODE_ENV !== "test") {
+      console.log(e);
+    }
     res.status(500).send("Sorry, something went wrong.");
   }
 };

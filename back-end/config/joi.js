@@ -19,11 +19,17 @@ const loginValidation = (data) => {
   return schema.validate(data);
 };
 
-// const docValidation = (data) => {
-//   const schema = Joi.object({
-//     title:Joi.string().min(6).max(50).required()
-//   })
-// }
+const userDataValidation = (data) => {
+  const schema = Joi.object({
+    link: Joi.string().regex(new RegExp("https?://"), "http:// or https://"),
+    about: Joi.string().max(100),
+    thumbnailURL: Joi.string(),
+    backgroundURL: Joi.string(),
+  });
+
+  return schema.validate(data);
+};
 
 module.exports.signupValidation = signupValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.userDataValidation = userDataValidation;

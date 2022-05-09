@@ -69,7 +69,9 @@ const loginLocal = async (req, res) => {
         return res.status(401).send("Wrong email or password.");
       }
     } catch (e) {
-      console.log(e);
+      if (process.env.NODE_ENV !== "test") {
+        console.log(e);
+      }
       return res.status(500).send(e);
     }
   } catch (e) {

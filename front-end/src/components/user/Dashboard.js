@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import UserServices from "../../services/user-services";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import UserCard from "../portal/UserCard";
+import ReactLoading from "react-loading";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -13,6 +15,9 @@ const Dashboard = () => {
   const [uploadedBg, setUploadedBg] = useState(null);
   const [link, setLink] = useState("");
   const [about, setAbout] = useState("");
+  const [cardPreview, setCardPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const [uploadedThumbnail, setUploadedThumbnail] = useState(null);
 
   useEffect(() => {
@@ -45,6 +50,7 @@ const Dashboard = () => {
 
   const uploadUserData = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
     const thumbnailRef = ref(storage, `images/${user.id}/thumbnail`);
     const backgroundRef = ref(storage, `images/${user.id}/background`);
     let thumbnailURL;
@@ -75,17 +81,19 @@ const Dashboard = () => {
         user.image = thumbnailURL;
         user.background = backgroundURL;
         localStorage.setItem("user", JSON.stringify(user));
-        window.location.reload(false);
+        // window.location.reload(false);
         toast.success(`${t("uploadSuccess")}`);
+        setIsUploading(false);
       }
     } catch (e) {
       console.log(e);
-      toast.error(e);
+      toast.error(e.response.data);
     }
   };
 
   return (
     <div className="p-8 ">
+      <UserCard user={cardPreview} setUser={setCardPreview} />
       <div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
@@ -95,8 +103,28 @@ const Dashboard = () => {
               </h3>
               <p className="mt-1 text-sm text-gray-600">{t("profileDes")}</p>
             </div>
+            <button
+              className=" h-10 p-1 my-4 bg-slate-500 rounded-md"
+              onClick={() => {
+                setCardPreview(user.id);
+              }}
+            >
+              preview
+            </button>
           </div>
-          <div className="mt-5 md:mt-0 md:col-span-2">
+
+          <div className=" relative mt-5 md:mt-0 md:col-span-2">
+            {isUploading && (
+              <div className=" flex justify-center items-center z-40 absolute top-0 bottom-0 left-0 right-0 bg-white opacity-90">
+                <ReactLoading
+                  className=" "
+                  type={"spin"}
+                  color="#64748B"
+                  height={"10%"}
+                  width={"10%"}
+                />
+              </div>
+            )}
             <form>
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">

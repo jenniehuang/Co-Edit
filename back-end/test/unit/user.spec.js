@@ -10,7 +10,7 @@ describe("user", () => {
   let anotherUser;
 
   let userFindByIdStub;
-  let userFindOneAndUpdateStub;
+  let userFindByIdAndUpdateStub;
   let userFindOneStub;
   beforeEach(async () => {
     // stub replace the function and make it return  what we want.
@@ -30,7 +30,7 @@ describe("user", () => {
 
     userFindByIdStub = sandbox.stub(User, "findById");
     userToken = await bypassAuth(sandbox, user, app);
-    userFindOneAndUpdateStub = sandbox.stub(User, "findOneAndUpdate");
+    userFindByIdAndUpdateStub = sandbox.stub(User, "findByIdAndUpdate");
     userFindOneStub = sandbox.stub(User, "findOne");
 
     //for bypassing auth because we can't stub passport authenticate.
@@ -46,12 +46,18 @@ describe("user", () => {
 
   describe("uploadUserData", () => {
     test("should upload user data", async () => {
-      userFindOneAndUpdateStub.returns(user);
       const result = await request(app)
         .patch(`/api/user/userData`)
         .set("Authorization", userToken)
+        .send({
+          thumbnailURL: "https://image",
+          backgroundURL: "https://image",
+          link: "https://123",
+          about: "asd",
+        })
         .expect(200);
       expect(result.text).toBe("ok");
+      expect(userFindByIdAndUpdateStub.calledOnce).toBe(true);
     });
   });
 

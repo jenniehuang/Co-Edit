@@ -60,12 +60,16 @@ const UserCard = ({ user, setUser }) => {
             target="_blank"
             className=" text-blue-500 underline text-xl absolute top-[calc(30vh_-_130px)] left-8"
           >
-            {userData.about}
+            <div className=" text-lg h-20 overflow-y-auto overflow-x-hidden pr-2">
+              {userData.about}
+            </div>
           </a>
         )}
         {!userData.link && (
-          <div className=" text-xl absolute top-[calc(30vh_-_130px)] left-8">
-            {userData.about}
+          <div className=" text-xl absolute top-[calc(30vh_-_130px)] left-8 ">
+            <div className=" h-full overflow-y-auto overflow-x-hidden">
+              {userData.about}
+            </div>
           </div>
         )}
       </div>
