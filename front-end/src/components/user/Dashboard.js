@@ -4,12 +4,16 @@ import { storage } from "../../firebase";
 import { toast } from "react-toastify";
 import UserServices from "../../services/user-services";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { update } from "../../redux/auth/authSlice";
+
 import UserCard from "../portal/UserCard";
 import ReactLoading from "react-loading";
 
 const Dashboard = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, isLoading, isErr, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
   const { t } = useTranslation();
   const [currentThumbnail, setCurrentThumbnail] = useState(user.image);
   const [uploadedBg, setUploadedBg] = useState(null);
@@ -19,6 +23,7 @@ const Dashboard = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const [uploadedThumbnail, setUploadedThumbnail] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -69,26 +74,25 @@ const Dashboard = () => {
       } else {
         backgroundURL = user.background;
       }
-
-      let response = await UserServices.uploadUserData(
+      const userData = {
         thumbnailURL,
         backgroundURL,
         link,
-        about
-      );
-      if (response.status === 200) {
-        const user = JSON.parse(localStorage.getItem("user"));
-        user.image = thumbnailURL;
-        user.background = backgroundURL;
-        localStorage.setItem("user", JSON.stringify(user));
-        // window.location.reload(false);
+        about,
+      };
+
+      dispatch(update(userData));
+      if (isSuccess) {
         toast.success(`${t("uploadSuccess")}`);
-        setIsUploading(false);
+      }
+      if (isErr) {
+        toast.error(message);
       }
     } catch (e) {
       console.log(e);
       toast.error(e.response.data);
     }
+    setIsUploading(false);
   };
 
   return (

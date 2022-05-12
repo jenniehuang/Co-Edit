@@ -95,7 +95,7 @@ describe("signup", () => {
   beforeEach(() => {
     // stub replace the function and make it return  what we want.
     findOneStub = sandbox.stub(User, "findOne");
-    newUser = new User({
+    user = new User({
       name: "asdasd",
       email: "333@333.com",
       password: "1234567",
@@ -110,7 +110,7 @@ describe("signup", () => {
   test("should signup w/ new email", async () => {
     // spy just spy on the function without replacing the function itself.
     findOneStub.resolves(null);
-    newUserSaveStub.resolves(newUser);
+    newUserSaveStub.resolves(user);
     //should resolves stub before request.
     const result = await request(app)
       .post("/api/auth/signup")
@@ -124,8 +124,7 @@ describe("signup", () => {
   });
 
   test("should not signup already existed email", async () => {
-    findOneStub.resolves(newUser);
-    newUserSaveStub.throws();
+    findOneStub.resolves(user);
     const result = await request(app)
       .post("/api/auth/signup")
       .send({
@@ -139,7 +138,7 @@ describe("signup", () => {
   });
 
   test("should not save user.", async () => {
-    findOneStub.resolves(user);
+    findOneStub.resolves(null);
     newUserSaveStub.throws();
     const result = await request(app)
       .post("/api/auth/signup")

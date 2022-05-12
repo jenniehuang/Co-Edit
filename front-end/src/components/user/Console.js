@@ -17,6 +17,14 @@ const Console = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isShown, setIsShown] = useState(false);
 
+  const truncate = (s) => {
+    const maxLength = 8;
+    if (s.length > maxLength) {
+      return `${s.substr(0, maxLength)}...`;
+    }
+    return s;
+  };
+
   return (
     <div className="flex flex-row w-full h-screen overflow-x-hidden">
       {isMenuOpen && (
@@ -42,7 +50,7 @@ const Console = () => {
               className="w-12 h-12 rounded-full border"
             />
             <div className="ml-4">
-              <div className=" text-xl">{user.name}</div>
+              <div className=" text-xl">{truncate(user.name)}</div>
               <div className=" text-xs text-gray-500">{user.email}</div>
             </div>
           </div>

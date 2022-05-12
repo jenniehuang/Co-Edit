@@ -56,7 +56,12 @@ describe("user", () => {
           about: "asd",
         })
         .expect(200);
-      expect(result.text).toBe("ok");
+      expect(result.body).toStrictEqual({
+        thumbnail: "https://image",
+        background: "https://image",
+        link: "https://123",
+        about: "asd",
+      });
       expect(userFindByIdAndUpdateStub.calledOnce).toBe(true);
     });
   });

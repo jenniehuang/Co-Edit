@@ -2,7 +2,7 @@ import axios from "axios";
 const API_URL = process.env.REACT_APP_API_URL_USER;
 
 class UserServices {
-  uploadUserData(thumbnailURL, backgroundURL, link, about) {
+  async uploadUserData(userData) {
     let token;
     if (localStorage.getItem("user")) {
       token = JSON.parse(localStorage.getItem("user")).token;
@@ -10,15 +10,19 @@ class UserServices {
       token = "";
     }
 
-    return axios.patch(
-      API_URL + `/userData`,
-      { thumbnailURL, backgroundURL, link, about },
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const response = await axios.patch(API_URL + `/userData`, userData, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response.data) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      user.image = response.data.thumbnail;
+      user.background = response.data.background;
+      localStorage.setItem("user", JSON.stringify(user));
+      return response.data;
+    }
   }
 
   getUserInfo(id) {

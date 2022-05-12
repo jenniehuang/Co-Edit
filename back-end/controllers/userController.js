@@ -18,7 +18,12 @@ const uploadUserData = async (req, res) => {
     console.log(e);
     return res.status(500).send("Sorry, something went wrong.");
   }
-  res.status(200).send("ok");
+  res.status(200).send({
+    thumbnail: thumbnailURL,
+    background: backgroundURL,
+    link,
+    about,
+  });
 };
 
 const getUserInfo = async (req, res) => {

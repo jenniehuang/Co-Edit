@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const signupValidation = (data) => {
   const schema = Joi.object({
-    name: Joi.string().max(10).required(),
+    name: Joi.string().max(20).required(),
     email: Joi.string().required().email(),
     password: Joi.string().min(6).max(255),
   });
