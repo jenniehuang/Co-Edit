@@ -101,13 +101,13 @@ export const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(update.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.isLoading = false;
         state.isSuccess = true;
         state.user.image = action.payload.thumbnail;
         state.user.background = action.payload.background;
       })
       .addCase(update.rejected, (state, action) => {
+        console.log(action);
         state.isLoading = false;
         state.isErr = true;
         state.message = action.payload;

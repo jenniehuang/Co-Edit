@@ -55,6 +55,7 @@ const Dashboard = () => {
 
   const uploadUserData = async (e) => {
     e.preventDefault();
+    console.log("123");
     setIsUploading(true);
     const thumbnailRef = ref(storage, `images/${user.id}/thumbnail`);
     const backgroundRef = ref(storage, `images/${user.id}/background`);
@@ -86,10 +87,12 @@ const Dashboard = () => {
         toast.success(`${t("uploadSuccess")}`);
       }
       if (isErr) {
+        console.log("e");
         toast.error(message);
       }
     } catch (e) {
       console.log(e);
+      console.log(e.response);
       toast.error(e.response.data);
     }
     setIsUploading(false);
