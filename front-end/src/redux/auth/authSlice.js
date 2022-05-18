@@ -42,7 +42,7 @@ export const update = createAsyncThunk(
   "/update",
   async (userData, thunkAPI) => {
     try {
-      return UserServices.uploadUserData(userData);
+      return await UserServices.uploadUserData(userData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -107,7 +107,6 @@ export const authSlice = createSlice({
         state.user.background = action.payload.background;
       })
       .addCase(update.rejected, (state, action) => {
-        console.log(action);
         state.isLoading = false;
         state.isErr = true;
         state.message = action.payload;

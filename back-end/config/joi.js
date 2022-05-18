@@ -21,7 +21,9 @@ const loginValidation = (data) => {
 
 const userDataValidation = (data) => {
   const schema = Joi.object({
-    link: Joi.string().regex(new RegExp("https?://"), "http:// or https://"),
+    link: Joi.string()
+      .regex(new RegExp("https?://"), "http:// or https://")
+      .allow(""),
     about: Joi.string().max(100),
     thumbnailURL: Joi.string(),
     backgroundURL: Joi.string(),

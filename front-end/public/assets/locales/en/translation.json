@@ -45,6 +45,7 @@
   "profile": "Profile",
   "profileDes": "This information will be displayed publicly so be careful what you share.",
   "link": "Link",
+  "linkDesc": "Only allows URL starts with 'http://' or 'https://', or leave it empty.",
   "about": "About",
   "aboutDes": "Brief description for your profile. URLs are hyperlinked.",
   "photo": "Photo",
@@ -52,5 +53,6 @@
   "uploadAFile": "Upload a file",
   "uploadDes": "or drag and drop",
   "uploadDes2": "PNG, JPG, GIF up to 10MB",
-  "save": "Save"
+  "save": "Save",
+  "preview": "preview"
 }

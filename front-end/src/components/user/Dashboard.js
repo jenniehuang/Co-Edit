@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import UserServices from "../../services/user-services";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { update } from "../../redux/auth/authSlice";
+import { update, reset } from "../../redux/auth/authSlice";
 
 import UserCard from "../portal/UserCard";
 import ReactLoading from "react-loading";
@@ -40,6 +40,17 @@ const Dashboard = () => {
     getUserInfo();
   }, []);
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(`${t("uploadSuccess")}`);
+    }
+    if (isErr) {
+      toast.error(message);
+    }
+
+    dispatch(reset());
+  }, [isErr, message, isSuccess]);
+
   const thumbnailHandler = (e) => {
     if (e.target.files[0]) {
       setCurrentThumbnail(URL.createObjectURL(e.target.files[0]));
@@ -55,7 +66,6 @@ const Dashboard = () => {
 
   const uploadUserData = async (e) => {
     e.preventDefault();
-    console.log("123");
     setIsUploading(true);
     const thumbnailRef = ref(storage, `images/${user.id}/thumbnail`);
     const backgroundRef = ref(storage, `images/${user.id}/background`);
@@ -83,16 +93,7 @@ const Dashboard = () => {
       };
 
       dispatch(update(userData));
-      if (isSuccess) {
-        toast.success(`${t("uploadSuccess")}`);
-      }
-      if (isErr) {
-        console.log("e");
-        toast.error(message);
-      }
     } catch (e) {
-      console.log(e);
-      console.log(e.response);
       toast.error(e.response.data);
     }
     setIsUploading(false);
@@ -111,12 +112,12 @@ const Dashboard = () => {
               <p className="mt-1 text-sm text-gray-600">{t("profileDes")}</p>
             </div>
             <button
-              className=" h-10 p-1 my-4 bg-slate-500 rounded-md"
+              className=" h-10 py-1 px-4 my-4 text-white bg-gray-500 hover:bg-gray-700 rounded-md"
               onClick={() => {
                 setCardPreview(user.id);
               }}
             >
-              preview
+              {t("preview")}
             </button>
           </div>
 
@@ -150,6 +151,9 @@ const Dashboard = () => {
                           value={link}
                         />
                       </div>
+                      <p className="mt-2 text-sm text-gray-500">
+                        {t("linkDesc")}
+                      </p>
                     </div>
                   </div>
 

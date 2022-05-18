@@ -45,6 +45,7 @@
   "profile": "個人資訊",
   "profileDes": "注意，個人資訊為公開",
   "link": "個人連結",
+  "linkDesc": "只能為 http:// 或 https:// 之連結，或空白",
   "about": "個性簽名",
   "aboutDes": "簡單向大家描述你自己吧~",
   "photo": "個人照片",
@@ -52,5 +53,6 @@
   "uploadAFile": "上傳圖片",
   "uploadDes": "或拖曳上傳",
   "uploadDes2": "PNG, JPG, GIF 最大至 10MB",
-  "save": "上傳"
+  "save": "上傳",
+  "preview": "預覽"
 }
