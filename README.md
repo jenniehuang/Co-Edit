@@ -9,7 +9,7 @@
 🔗Website URL: https://www.co-edit.xyz/
 <br/>
 <br/>
-Test account and password:
+Test account and password: test@test.com/testtest
 <br/>
 <br/>
 
@@ -42,10 +42,16 @@ Test account and password:
 
 ## Main Features
 
+- Users can sign in locally or use Google OAuth 2.0.
+- User authentication with Json Web Token.
+- Use socket.io for real time co-editing.
+- Supports English and Chinese.
+- Setup CICD pipeline with cloudbuild cloud pub/sub.
 - Differentiate every user with different colors in editor.
 - Supports mobile devices so you can update content anytime anywhere.
 - Only host can grant or remove access to your documents.
 - Supports exporting your documents as PDF files.
+- Hosting images on firebase storage.
 
 ## Backend Technique
 
