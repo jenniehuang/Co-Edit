@@ -131,8 +131,16 @@ const Homepage = () => {
           <div className="px-4 lg:px-40 py-4 flex justify-between items-center">
             <p className="">©2022 jennieHuang</p>
             <div className="flex flex-row">
-              <img className="w-8 cursor-pointer" src={github} alt="" />
-              <img className="w-8 ml-4 cursor-pointer" src={linkedin} alt="" />
+              <a href="https://github.com/jenniehuang">
+                <img className="w-8 cursor-pointer" src={github} alt="" />
+              </a>
+              <a href="https://www.linkedin.com/in/yu-ting-huang-643453143/">
+                <img
+                  className="w-8 ml-4 cursor-pointer"
+                  src={linkedin}
+                  alt=""
+                />
+              </a>
             </div>
           </div>
         </footer>
