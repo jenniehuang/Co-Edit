@@ -4,6 +4,7 @@ import { reset } from "../../redux/auth/authSlice";
 import { useTranslation } from "react-i18next";
 import Docs from "./Docs";
 import { useEffect } from "react";
+import add from "../../images/add.png";
 
 const UserPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -32,15 +33,24 @@ const UserPage = () => {
       <div className="absolute top-[calc(30vh_+_10px)] left-32 text-4xl">
         {user.name}
       </div>
-      <div className=" mt-20 ">
+      <div className=" mt-20  ">
         <div className="ml-8 text-2xl text-gray-600">
           {t("recentlyChanged")}
         </div>
-        <Docs section={"recentlyChanged"} />
+        <div className="flex flex-row items-center md:ml-4">
+          <div className="flex items-center justify-center cursor-pointer relative group w-80 rounded m-4 shadow-md text-black hover:border h-[296px]">
+            <a className="w-1/5" href="/newdoc" target="_blank">
+              <img className="" src={add} alt="" />
+            </a>
+          </div>
+          <Docs section={"recentlyChanged"} />
+        </div>
       </div>
       <div className=" mt-8 ">
         <div className="ml-8 text-2xl text-gray-600">{t("recentlyOpened")}</div>
-        <Docs section={"recentlyOpened"} />
+        <div className=" md:ml-4">
+          <Docs section={"recentlyOpened"} />
+        </div>
       </div>
     </div>
   );

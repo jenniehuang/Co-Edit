@@ -69,7 +69,11 @@ const Docs = ({ section }) => {
   }
 
   return (
-    <div className="flex flex-row flex-wrap items-center justify-center md:justify-start md:ml-4">
+    <div
+      className={`flex flex-row flex-wrap items-center justify-center md:justify-start ${
+        docArr.length === 0 ? "" : ""
+      } `}
+    >
       {docArr.length !== 0 &&
         docArr.map((v) => (
           <DocCard

@@ -62,9 +62,7 @@ const Console = () => {
           >
             ✏ {t("dashboard")}
           </div>
-          <a className="item" href="/newdoc" target="_blank">
-            <div className="">🗒 {t("create")}</div>
-          </a>
+
           <div
             onClick={() => {
               navigate("/Docs");
