@@ -394,7 +394,7 @@ const Editor = () => {
       )}
 
       <Emoji
-        CN={"fixed left-0 top-2/4 "}
+        CN={"fixed left-0 top-32"}
         isEmoji={isEmoji}
         setChosenEmoji={setChosenEmoji}
       />

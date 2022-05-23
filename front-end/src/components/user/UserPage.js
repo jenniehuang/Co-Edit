@@ -1,12 +1,19 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { reset } from "../../redux/auth/authSlice";
 
 import { useTranslation } from "react-i18next";
 import Docs from "./Docs";
+import { useEffect } from "react";
 
 const UserPage = () => {
   const { user } = useSelector((state) => state.auth);
 
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   return (
     <div className=" relative w-full">
