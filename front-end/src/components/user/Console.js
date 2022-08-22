@@ -13,9 +13,8 @@ const Console = () => {
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isShown, setIsShown] = useState(false);
+  const width = window.screen.width;
+  const [isMenuOpen, setIsMenuOpen] = useState(width > 600 ? true : false);
 
   const truncate = (s) => {
     const maxLength = 8;
@@ -79,6 +78,9 @@ const Console = () => {
           >
             📚 {t("share")}
           </div>
+          <a className="item" href="/newdoc" target="_blank">
+            <div className="">🗒 {t("create")}</div>
+          </a>
         </div>
       )}
       <div
@@ -91,7 +93,6 @@ const Console = () => {
         <Nav
           setIsMenuOpen={setIsMenuOpen}
           isMenuOpen={isMenuOpen}
-          setIsShown={setIsShown}
           CN={`bg-gray-600 bg-opacity-50 pr-2`}
         />
 

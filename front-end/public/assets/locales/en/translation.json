@@ -28,7 +28,7 @@
   "type": "Type the document name to delete the document",
   "wrong": "Wrong document title.",
   "noUser": "No users.",
-  "empty": "No stuff here!",
+  "empty": "No stuff here. Click to create a new one!",
   "join": "just joined us!",
   "left": "just left us!",
   "dashboard": "Profile",

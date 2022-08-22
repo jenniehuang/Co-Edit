@@ -6,13 +6,15 @@ import DocServices from "../../services/doc-services";
 import Loading from "../Loading";
 import { useTranslation } from "react-i18next";
 
+import add from "../../images/add.png";
+
 const Docs = ({ section }) => {
   const { t } = useTranslation();
 
-  let [docArr, setDocArr] = useState([]);
-  let [loadCount, setLoadCount] = useState(0);
-  let [isLoading, setIsLoading] = useState(true);
-  let [isPicsLoaded, setIsPicsLoaded] = useState(false);
+  const [docArr, setDocArr] = useState([]);
+  const [loadCount, setLoadCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPicsLoaded, setIsPicsLoaded] = useState(false);
 
   const path = window.location.pathname;
 
@@ -91,7 +93,20 @@ const Docs = ({ section }) => {
             section={section}
           />
         ))}
-      {docArr.length === 0 && <div>{t("empty")}</div>}
+      {docArr.length === 0 && (
+        <a
+          className="relative cursor-pointer group flex items-center justify-center shadow rounded-md m-4 max-w-sm w-80 h-[272px] border border-black"
+          href="/newdoc"
+          target="_blank"
+        >
+          <p className="absolute top-12"> {t("empty")}</p>
+          <img
+            className="w-16 h-16 opacity-30 group-hover:opacity-100"
+            src={add}
+            alt=""
+          />
+        </a>
+      )}
     </div>
   );
 };
