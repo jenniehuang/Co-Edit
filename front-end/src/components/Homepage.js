@@ -129,7 +129,7 @@ const Homepage = () => {
         {/*  */}
         <footer className=" mt-20 w-full border-t border-primary ">
           <div className="px-4 lg:px-40 py-4 flex justify-between items-center">
-            <p className="">©2022 jennieHuang</p>
+            <p className="">©2023 jennieHuang</p>
             <div className="flex flex-row">
               <a href="https://github.com/jenniehuang">
                 <img className="w-8 cursor-pointer" src={github} alt="" />
