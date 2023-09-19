@@ -287,9 +287,6 @@ const Editor = () => {
     setCursors(c);
   }, []);
 
-  // const imageHandler = () => {
-
-  // };
   function imageHandler() {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
