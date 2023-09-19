@@ -4,7 +4,6 @@ const User = require("../models/user-model");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const fetch = require("node-fetch");
-//http://www.passportjs.org/packages/passport-google-oauth20/
 
 passport.use(
   new GoogleStrategy(
@@ -18,7 +17,6 @@ passport.use(
     async function (accessToken, refreshToken, profile, cb) {
       let foundUser = await User.findOne({ googleID: profile.id });
       if (foundUser) {
-        console.log("already exist.");
         cb(null, foundUser);
       } else {
         const auth = "563492ad6f91700001000001c889c828ca8441f5a53ac461e4dbfa16";
@@ -43,7 +41,6 @@ passport.use(
         });
 
         await newUser.save();
-        console.log("New user saved");
         cb(null, newUser);
       }
     }

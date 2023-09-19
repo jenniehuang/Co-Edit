@@ -107,7 +107,6 @@ const getOneOrCreate = async (req, res) => {
         .send("Sorry! You are not authorized to access this document.");
     return res.status(200).send(doc);
   } else {
-    console.log("new");
     const newDoc = await Document.create({
       _id,
       data: "",
