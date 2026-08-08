@@ -10,7 +10,7 @@
 ## Project status: Archived
 
 <p>
-Co-Edit was originally developed and deployed as a portfolio project in 2021.
+Co-Edit was originally developed and deployed as a portfolio project in 2022.
 The live service is no longer maintained, but the source code, architecture
 documentation, and product demonstration are preserved in this repository.
 Some dependencies and cloud configurations may require updates before the
