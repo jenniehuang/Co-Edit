@@ -6,10 +6,17 @@
 📜Co-edit is a WYSIWYG editor allows you to co-editing the same document with others online in real-time.
 <br/>
 <br/>
-🔗Website URL: https://www.co-edit.xyz/
-<br/>
-<br/>
-Test account and password: test@test.com/testtest
+
+## Project status: Archived
+
+<p>
+Co-Edit was originally developed and deployed as a portfolio project in 2021.
+The live service is no longer maintained, but the source code, architecture
+documentation, and product demonstration are preserved in this repository.
+Some dependencies and cloud configurations may require updates before the
+project can be run locally.
+</p>
+
 <br/>
 <br/>
 
